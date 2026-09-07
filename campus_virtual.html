@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EduTech Campus Virtual – Aprende programación web, diseño UX y desarrollo de software con docentes expertos y recursos actualizados." />
+  <meta name="keywords" content="campus virtual, aprendizaje en línea, programación, diseño web, tecnología educativa" />
+  <meta name="author" content="EduTech Campus Virtual – Todos los derechos reservados © 2026" />
+  <meta name="robots" content="index, follow" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="EduTech Campus Virtual" />
+  <meta property="og:description" content="Plataforma de enseñanza tecnológica para el siglo XXI." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://edutech-campus.example.com" />
+
+  <title>EduTech Campus Virtual | Aprende Tecnología</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --clr-bg:        #0B0F1A;
+      --clr-surface:   #131927;
+      --clr-card:      #1B2236;
+      --clr-border:    #252E45;
+      --clr-accent:    #3EF0B0;   /* teal eléctrico – firma */
+      --clr-accent2:   #7B5CF6;   /* violeta */
+      --clr-accent3:   #F05C3E;   /* naranja cálido */
+      --clr-text:      #E8ECF4;
+      --clr-muted:     #7A869A;
+      --clr-white:     #FFFFFF;
+
+      --ff-display: 'Space Grotesk', sans-serif;
+      --ff-mono:    'DM Mono', monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--ff-display);
+      background-color: var(--clr-bg);
+      color: var(--clr-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ── LAYOUT WRAPPER ─────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 26, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--clr-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-mono);
+      font-size: 0.75rem;
+      color: var(--clr-bg);
+      font-weight: 500;
+    }
+
+    .logo span { color: var(--clr-accent); }
+
+    nav ul {
+      display: flex;
+      gap: 32px;
+    }
+
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--clr-muted);
+      transition: color .2s;
+    }
+
+    nav a:hover { color: var(--clr-white); }
+    nav a.active { color: var(--clr-accent); }
+
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: var(--ff-display);
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--clr-muted);
+      border: 1px solid var(--clr-border);
+    }
+    .btn-ghost:hover { color: var(--clr-white); border-color: var(--clr-muted); }
+
+    .btn-primary {
+      background: var(--clr-accent);
+      color: var(--clr-bg);
+    }
+    .btn-primary:hover { background: #62f5c0; transform: translateY(-1px); }
+
+    .btn-lg {
+      padding: 14px 30px;
+      font-size: 1rem;
+      border-radius: var(--radius-md);
+    }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    .hero {
+      padding: 96px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Firma visual: cuadrícula de puntos de fondo */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, var(--clr-border) 1px, transparent 0);
+      background-size: 32px 32px;
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    /* Manchas de color de ambiente */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -160px;
+      right: -160px;
+      width: 560px;
+      height: 560px;
+      background: radial-gradient(circle, rgba(62,240,176,.12), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-blob2 {
+      position: absolute;
+      bottom: -120px;
+      left: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(123,92,246,.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(62,240,176,.1);
+      border: 1px solid rgba(62,240,176,.25);
+      color: var(--clr-accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--ff-mono);
+      letter-spacing: .08em;
+      padding: 5px 14px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--clr-accent);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .2; }
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent { color: var(--clr-accent); }
+    h1 .accent2 { color: var(--clr-accent2); }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--clr-muted);
+      max-width: 480px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 36px;
+      margin-top: 44px;
+      padding-top: 32px;
+      border-top: 1px solid var(--clr-border);
+    }
+
+    .stat-num {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--clr-white);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--clr-muted);
+      margin-top: 2px;
+    }
+
+    /* Hero visual: terminal simulada */
+    .hero-visual {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.5);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: var(--clr-card);
+      border-bottom: 1px solid var(--clr-border);
+    }
+
+    .t-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .t-dot:nth-child(1) { background: #FF5F57; }
+    .t-dot:nth-child(2) { background: #FEBC2E; }
+    .t-dot:nth-child(3) { background: #28C840; }
+
+    .terminal-title {
+      font-family: var(--ff-mono);
+      font-size: 0.7rem;
+      color: var(--clr-muted);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .terminal-body {
+      padding: 24px 22px;
+      font-family: var(--ff-mono);
+      font-size: 0.82rem;
+      line-height: 1.9;
+    }
+
+    .t-comment { color: #4A5568; }
+    .t-keyword { color: var(--clr-accent2); }
+    .t-fn  { color: var(--clr-accent); }
+    .t-str { color: #F6AD55; }
+    .t-num { color: var(--clr-accent3); }
+    .t-cursor {
+      display: inline-block;
+      width: 9px;
+      height: 16px;
+      background: var(--clr-accent);
+      vertical-align: middle;
+      animation: blink 1s step-start infinite;
+    }
+
+    /* ── SECTION SHARED ─────────────────────────────────────── */
+    section { padding: 80px 0; }
+
+    .section-eyebrow {
+      font-family: var(--ff-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--clr-accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--clr-muted);
+      max-width: 520px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+      gap: 24px;
+    }
+
+    /* ── RUTAS / CURSOS ─────────────────────────────────────── */
+    .courses-section { border-top: 1px solid var(--clr-border); }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .course-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: transform .25s, border-color .25s;
+    }
+
+    .course-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--clr-accent);
+    }
+
+    .card-thumb {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      position: relative;
+    }
+
+    .card-thumb-webdev  { background: linear-gradient(135deg, #0f2744, #1a3d5c); }
+    .card-thumb-ux      { background: linear-gradient(135deg, #2a1344, #4a2080); }
+    .card-thumb-python  { background: linear-gradient(135deg, #0f2e20, #1a5c3a); }
+    .card-thumb-cloud   { background: linear-gradient(135deg, #1a1a44, #2a2a80); }
+    .card-thumb-mobile  { background: linear-gradient(135deg, #44200f, #7a3520); }
+    .card-thumb-sec     { background: linear-gradient(135deg, #2e0f1a, #5c1a30); }
+
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-family: var(--ff-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .badge-new     { background: rgba(62,240,176,.2);  color: var(--clr-accent); }
+    .badge-popular { background: rgba(123,92,246,.2);  color: #a78bfa; }
+    .badge-pro     { background: rgba(240,92,62,.2);   color: var(--clr-accent3); }
+
+    .card-body { padding: 20px 22px 24px; }
+
+    .card-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.72rem;
+      color: var(--clr-muted);
+      font-family: var(--ff-mono);
+      margin-bottom: 10px;
+    }
+
+    .card-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--clr-muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--clr-border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-right: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--clr-accent2), var(--clr-accent));
+    }
+
+    .progress-pct {
+      font-family: var(--ff-mono);
+      font-size: 0.72rem;
+      color: var(--clr-accent);
+      white-space: nowrap;
+    }
+
+    /* ── PROCESO DE APRENDIZAJE ─────────────────────────────── */
+    .process-section {
+      background: var(--clr-surface);
+      border-top: 1px solid var(--clr-border);
+      border-bottom: 1px solid var(--clr-border);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--clr-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .process-step {
+      background: var(--clr-surface);
+      padding: 36px 28px;
+      position: relative;
+    }
+
+    .step-number {
+      font-family: var(--ff-mono);
+      font-size: 0.7rem;
+      color: var(--clr-muted);
+      letter-spacing: .1em;
+      margin-bottom: 16px;
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--clr-muted);
+      line-height: 1.65;
+    }
+
+    .process-step:first-child .step-title { color: var(--clr-accent); }
+    .process-step:nth-child(2) .step-title { color: var(--clr-accent2); }
+    .process-step:nth-child(3) .step-title { color: #F6AD55; }
+    .process-step:last-child .step-title { color: var(--clr-accent3); }
+
+    /* ── DOCENTES ─────────────────────────────────────────────*/
+    .teachers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .teacher-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: 28px 22px;
+      text-align: center;
+      transition: border-color .2s;
+    }
+
+    .teacher-card:hover { border-color: var(--clr-accent2); }
+
+    .teacher-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      background: linear-gradient(135deg, var(--clr-accent2), var(--clr-accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .teacher-name { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+
+    .teacher-role {
+      font-size: 0.75rem;
+      color: var(--clr-muted);
+      font-family: var(--ff-mono);
+      margin-bottom: 14px;
+    }
+
+    .teacher-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .tag {
+      font-family: var(--ff-mono);
+      font-size: 0.65rem;
+      padding: 3px 9px;
+      border-radius: 99px;
+      border: 1px solid var(--clr-border);
+      color: var(--clr-muted);
+    }
+
+    /* ── TESTIMONIOS ─────────────────────────────────────────── */
+    .testimonials-section { border-top: 1px solid var(--clr-border); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .testimonial-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+    }
+
+    .stars {
+      color: #FEBC2E;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: var(--clr-text);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--clr-accent3), var(--clr-accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .author-name { font-size: 0.85rem; font-weight: 600; }
+    .author-role { font-size: 0.72rem; color: var(--clr-muted); font-family: var(--ff-mono); }
+
+    /* ── CTA BANNER ─────────────────────────────────────────── */
+    .cta-section {
+      border-top: 1px solid var(--clr-border);
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, rgba(62,240,176,.08), rgba(123,92,246,.08));
+      border: 1px solid rgba(62,240,176,.2);
+      border-radius: var(--radius-lg);
+      padding: 64px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(62,240,176,.07), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .cta-box p {
+      font-size: 1rem;
+      color: var(--clr-muted);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--clr-border);
+      padding: 60px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .logo { margin-bottom: 16px; }
+
+    .footer-desc {
+      font-size: 0.85rem;
+      color: var(--clr-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social-link {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--clr-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--clr-muted);
+      transition: all .2s;
+    }
+
+    .social-link:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
+
+    .footer-col h4 {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--clr-white);
+      margin-bottom: 18px;
+      font-family: var(--ff-mono);
+    }
+
+    .footer-col ul li + li { margin-top: 10px; }
+
+    .footer-col a {
+      font-size: 0.85rem;
+      color: var(--clr-muted);
+      transition: color .2s;
+    }
+
+    .footer-col a:hover { color: var(--clr-white); }
+
+    .footer-bottom {
+      padding-top: 28px;
+      border-top: 1px solid var(--clr-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom p {
+      font-size: 0.78rem;
+      color: var(--clr-muted);
+      font-family: var(--ff-mono);
+    }
+
+    .footer-bottom a {
+      color: var(--clr-accent);
+      transition: opacity .2s;
+    }
+    .footer-bottom a:hover { opacity: .75; }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--clr-muted);
+      font-family: var(--ff-mono);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--clr-white); }
+
+    /* ── ACCESIBILIDAD ─────────────────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--clr-accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║          HEADER              ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <header>
+    <div class="container header-inner">
+
+      <a href="#inicio" class="logo" aria-label="Inicio EduTech Campus">
+        <div class="logo-icon">&lt;/&gt;</div>
+        Edu<span>Tech</span>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="#cursos"    class="active">Cursos</a></li>
+          <li><a href="#proceso">Aprendizaje</a></li>
+          <li><a href="#docentes">Docentes</a></li>
+          <li><a href="#opiniones">Testimonios</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-cta">
+        <a href="#inicio" class="btn btn-ghost">Iniciar sesión</a>
+        <a href="https://classroom.google.com/c/Nzk3MjkzNzcwOTY4?cjc=f7xirzth" target="_blank" rel="noopener" class="btn btn-primary">Subir proyecto ↗</a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║           MAIN               ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <main>
+
+    <!-- ── HERO ──────────────────────────────────────── -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-blob2" aria-hidden="true"></div>
+
+      <div class="container hero-inner">
+
+        <div class="hero-content">
+          <p class="hero-eyebrow">Campus Virtual · Tecnología Educativa</p>
+
+          <h1 id="hero-title">
+            Aprende a construir<br/>
+            el <span class="accent">futuro digital</span><br/>
+            <span class="accent2">línea a línea</span>
+          </h1>
+
+          <p class="hero-desc">
+            Rutas de aprendizaje estructuradas en programación, diseño UX y cloud computing. 
+            Proyectos reales, mentores activos en la industria y certificados que importan.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#cursos" class="btn btn-primary btn-lg">Explorar rutas →</a>
+            <a href="#proceso" class="btn btn-ghost btn-lg">¿Cómo funciona?</a>
+          </div>
+
+          <div class="hero-stats" role="list">
+            <div role="listitem">
+              <div class="stat-num">2 400+</div>
+              <div class="stat-label">Estudiantes activos</div>
+            </div>
+            <div role="listitem">
+              <div class="stat-num">18</div>
+              <div class="stat-label">Rutas de aprendizaje</div>
+            </div>
+            <div role="listitem">
+              <div class="stat-num">94 %</div>
+              <div class="stat-label">Tasa de completitud</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal decorativa -->
+        <div class="hero-visual" role="img" aria-label="Ejemplo de código de una clase del campus">
+          <div class="terminal-bar">
+            <span class="t-dot"></span>
+            <span class="t-dot"></span>
+            <span class="t-dot"></span>
+            <span class="terminal-title">campus-virtual/clase-01/index.html</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-comment">&lt;!-- Lección 01: Estructura semántica --&gt;</span></div>
+            <div><span class="t-keyword">&lt;!</span><span class="t-fn">DOCTYPE</span> <span class="t-str">html</span><span class="t-keyword">&gt;</span></div>
+            <div><span class="t-keyword">&lt;html</span> <span class="t-fn">lang</span>=<span class="t-str">"es"</span><span class="t-keyword">&gt;</span></div>
+            <div>&nbsp;&nbsp;<span class="t-keyword">&lt;head&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;meta</span> <span class="t-fn">charset</span>=<span class="t-str">"UTF-8"</span><span class="t-keyword">/&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;title&gt;</span><span class="t-str">Mi primer sitio web</span><span class="t-keyword">&lt;/title&gt;</span></div>
+            <div>&nbsp;&nbsp;<span class="t-keyword">&lt;/head&gt;</span></div>
+            <div>&nbsp;&nbsp;<span class="t-keyword">&lt;body&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;header&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;h1&gt;</span><span class="t-str">Hola, mundo</span><span class="t-keyword">&lt;/h1&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;/header&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;main&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-comment">&lt;!-- tu contenido aquí --&gt;</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-keyword">&lt;/main&gt;</span></div>
+            <div>&nbsp;&nbsp;<span class="t-keyword">&lt;/body&gt;</span></div>
+            <div><span class="t-keyword">&lt;/html&gt;</span> <span class="t-cursor"></span></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CURSOS ──────────────────────────────────────── -->
+    <section class="courses-section" id="cursos" aria-labelledby="courses-title">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">Rutas de aprendizaje</p>
+            <h2 class="section-title" id="courses-title">Tecnologías que impulsan<br/>el mercado laboral</h2>
+            <p class="section-subtitle">Cada ruta está diseñada con docentes activos en la industria y actualizada cada semestre.</p>
+          </div>
+          <a href="#cursos" class="btn btn-ghost">Ver todas →</a>
+        </div>
+
+        <div class="courses-grid">
+
+          <article class="course-card">
+            <div class="card-thumb card-thumb-webdev">
+              🌐
+              <span class="card-badge badge-popular">Popular</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>⏱ 48 h</span>
+                <span>📚 12 módulos</span>
+                <span>🟢 Básico</span>
+              </div>
+              <h3 class="card-title">Desarrollo Web Full-Stack</h3>
+              <p class="card-desc">HTML semántico, CSS moderno, JavaScript ES2024 y frameworks como React y Node.js.</p>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+                <span class="progress-pct">72 % completado</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-thumb card-thumb-ux">
+              🎨
+              <span class="card-badge badge-new">Nuevo</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>⏱ 32 h</span>
+                <span>📚 8 módulos</span>
+                <span>🟡 Intermedio</span>
+              </div>
+              <h3 class="card-title">Diseño UX/UI con Figma</h3>
+              <p class="card-desc">Investigación de usuarios, prototipado, sistemas de diseño y pruebas de usabilidad.</p>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+                <span class="progress-pct">40 % completado</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-thumb card-thumb-python">
+              🐍
+              <span class="card-badge badge-popular">Popular</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>⏱ 60 h</span>
+                <span>📚 15 módulos</span>
+                <span>🟢 Básico</span>
+              </div>
+              <h3 class="card-title">Python para Data Science</h3>
+              <p class="card-desc">Pandas, NumPy, visualización de datos, ML con scikit-learn y proyectos aplicados.</p>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width:15%"></div></div>
+                <span class="progress-pct">15 % completado</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-thumb card-thumb-cloud">
+              ☁️
+              <span class="card-badge badge-pro">Pro</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>⏱ 40 h</span>
+                <span>📚 10 módulos</span>
+                <span>🔴 Avanzado</span>
+              </div>
+              <h3 class="card-title">Cloud Computing AWS</h3>
+              <p class="card-desc">Arquitectura serverless, contenedores Docker, CI/CD y preparación para la certificación AWS.</p>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                <span class="progress-pct">No iniciado</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-thumb card-thumb-mobile">
+              📱
+              <span class="card-badge badge-new">Nuevo</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>⏱ 52 h</span>
+                <span>📚 13 módulos</span>
+                <span>🟡 Intermedio</span>
+              </div>
+              <h3 class="card-title">Desarrollo Móvil React Native</h3>
+              <p class="card-desc">Apps nativas para iOS y Android desde una sola base de código JavaScript con React Native.</p>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width:5%"></div></div>
+                <span class="progress-pct">5 % completado</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-thumb card-thumb-sec">
+              🔐
+              <span class="card-badge badge-pro">Pro</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>⏱ 36 h</span>
+                <span>📚 9 módulos</span>
+                <span>🔴 Avanzado</span>
+              </div>
+              <h3 class="card-title">Ciberseguridad Esencial</h3>
+              <p class="card-desc">Análisis de vulnerabilidades, pruebas de penetración ética y protección de sistemas.</p>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                <span class="progress-pct">No iniciado</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROCESO ──────────────────────────────────────── -->
+    <section class="process-section" id="proceso" aria-labelledby="process-title">
+      <div class="container">
+
+        <div class="section-header" style="margin-bottom: 40px">
+          <div>
+            <p class="section-eyebrow">Metodología</p>
+            <h2 class="section-title" id="process-title">El proceso de enseñanza</h2>
+            <p class="section-subtitle">Un ciclo continuo diseñado para consolidar conocimiento real.</p>
+          </div>
+        </div>
+
+        <div class="process-grid" role="list">
+
+          <div class="process-step" role="listitem">
+            <div class="step-number">PASO 01</div>
+            <div class="step-icon">📖</div>
+            <h3 class="step-title">Aprender el concepto</h3>
+            <p class="step-desc">Videos cortos, lecturas técnicas y explicaciones visuales desarrolladas por expertos de la industria.</p>
+          </div>
+
+          <div class="process-step" role="listitem">
+            <div class="step-number">PASO 02</div>
+            <div class="step-icon">💻</div>
+            <h3 class="step-title">Practicar en el entorno</h3>
+            <p class="step-desc">Editor en línea con entornos preconfigurados para comenzar a codificar desde el primer minuto.</p>
+          </div>
+
+          <div class="process-step" role="listitem">
+            <div class="step-number">PASO 03</div>
+            <div class="step-icon">🛠️</div>
+            <h3 class="step-title">Construir un proyecto</h3>
+            <p class="step-desc">Cada módulo culmina con un proyecto aplicado que forma parte de tu portafolio profesional.</p>
+          </div>
+
+          <div class="process-step" role="listitem">
+            <div class="step-number">PASO 04</div>
+            <div class="step-icon">✅</div>
+            <h3 class="step-title">Obtener retroalimentación</h3>
+            <p class="step-desc">Revisión de código por compañeros y docentes, con rúbricas claras y comentarios accionables.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DOCENTES ──────────────────────────────────────── -->
+    <section id="docentes" aria-labelledby="teachers-title">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">Equipo docente</p>
+            <h2 class="section-title" id="teachers-title">Aprende de quienes<br/>hacen la industria</h2>
+          </div>
+          <a href="#docentes" class="btn btn-ghost">Ver perfil completo →</a>
+        </div>
+
+        <div class="teachers-grid">
+
+          <div class="teacher-card">
+            <div class="teacher-avatar">👩‍💻</div>
+            <div class="teacher-name">Ana Torres</div>
+            <div class="teacher-role">Desarrollo Web · 8 años exp.</div>
+            <div class="teacher-tags">
+              <span class="tag">React</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">TypeScript</span>
+            </div>
+          </div>
+
+          <div class="teacher-card">
+            <div class="teacher-avatar">👨‍🎨</div>
+            <div class="teacher-name">Carlos Méndez</div>
+            <div class="teacher-role">UX/UI Design · 10 años exp.</div>
+            <div class="teacher-tags">
+              <span class="tag">Figma</span>
+              <span class="tag">Investigación</span>
+              <span class="tag">Accesibilidad</span>
+            </div>
+          </div>
+
+          <div class="teacher-card">
+            <div class="teacher-avatar">👩‍🔬</div>
+            <div class="teacher-name">Laura Ríos</div>
+            <div class="teacher-role">Data Science · PhD Computación</div>
+            <div class="teacher-tags">
+              <span class="tag">Python</span>
+              <span class="tag">ML</span>
+              <span class="tag">TensorFlow</span>
+            </div>
+          </div>
+
+          <div class="teacher-card">
+            <div class="teacher-avatar">👨‍🔧</div>
+            <div class="teacher-name">Miguel Salas</div>
+            <div class="teacher-role">Cloud & DevOps · AWS Certified</div>
+            <div class="teacher-tags">
+              <span class="tag">AWS</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Kubernetes</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TESTIMONIOS ──────────────────────────────────── -->
+    <section class="testimonials-section" id="opiniones" aria-labelledby="testimonials-title">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">Testimonios</p>
+            <h2 class="section-title" id="testimonials-title">Lo que dicen<br/>nuestros estudiantes</h2>
+          </div>
+        </div>
+
+        <div class="testimonials-grid">
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <p class="testimonial-text">"Pasé de no saber nada de código a lanzar mi portafolio en 4 meses. La estructura del campus y el acompañamiento del docente hicieron la diferencia."</p>
+            <footer class="testimonial-author">
+              <div class="author-avatar">🧑</div>
+              <div>
+                <div class="author-name">Diego Vargas</div>
+                <div class="author-role">Estudiante · Desarrollo Web</div>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <p class="testimonial-text">"El curso de UX/UI con Figma está muy bien pensado. Los proyectos aplicados me ayudaron a construir un portafolio sólido para el mercado laboral."</p>
+            <footer class="testimonial-author">
+              <div class="author-avatar">👩</div>
+              <div>
+                <div class="author-name">Sofía Arce</div>
+                <div class="author-role">Estudiante · UX/UI Design</div>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="4 de 5 estrellas">★★★★☆</div>
+            <p class="testimonial-text">"La comunidad de estudiantes y las sesiones de revisión de código me hicieron mejorar mucho más rápido de lo que esperaba. Muy recomendado."</p>
+            <footer class="testimonial-author">
+              <div class="author-avatar">🧔</div>
+              <div>
+                <div class="author-name">Pablo Herrera</div>
+                <div class="author-role">Estudiante · Python Data Science</div>
+              </div>
+            </footer>
+          </blockquote>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA FINAL ──────────────────────────────────────── -->
+    <section class="cta-section" id="contacto" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta-box">
+          <p class="section-eyebrow" style="justify-content:center;display:flex;">¿Listo para empezar?</p>
+          <h2 id="cta-title">Tu próxima línea de código<br/>está a un clic de distancia</h2>
+          <p>Inscríbete hoy, accede a todos los materiales y entrega tu proyecto directamente en Google Classroom.</p>
+          <div class="cta-actions">
+            <a href="https://classroom.google.com/c/Nzk3MjkzNzcwOTY4?cjc=f7xirzth"
+               target="_blank" rel="noopener"
+               class="btn btn-primary btn-lg">
+              Subir mi proyecto en Classroom ↗
+            </a>
+            <a href="#cursos" class="btn btn-ghost btn-lg">Ver cursos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║           FOOTER             ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <footer id="footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="#inicio" class="logo" aria-label="Inicio EduTech Campus">
+            <div class="logo-icon">&lt;/&gt;</div>
+            Edu<span>Tech</span>
+          </a>
+          <p class="footer-desc">
+            Campus virtual de enseñanza tecnológica diseñado para que cualquier persona pueda aprender programación,
+            diseño y cloud computing desde cero hasta nivel profesional.
+          </p>
+          <div class="footer-social" aria-label="Redes sociales">
+            <a href="#" class="social-link" aria-label="GitHub">⌘</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+            <a href="#" class="social-link" aria-label="YouTube">▶</a>
+            <a href="#" class="social-link" aria-label="Instagram">◈</a>
+          </div>
+        </div>
+
+        <nav class="footer-col" aria-label="Plataforma">
+          <h4>Plataforma</h4>
+          <ul>
+            <li><a href="#cursos">Cursos</a></li>
+            <li><a href="#proceso">Metodología</a></li>
+            <li><a href="#docentes">Docentes</a></li>
+            <li><a href="#opiniones">Testimonios</a></li>
+          </ul>
+        </nav>
+
+        <nav class="footer-col" aria-label="Recursos">
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="#">Documentación</a></li>
+            <li><a href="#">Blog técnico</a></li>
+            <li><a href="#">Foro comunidad</a></li>
+            <li><a href="#">Proyectos ejemplo</a></li>
+          </ul>
+        </nav>
+
+        <nav class="footer-col" aria-label="Contacto">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="mailto:info@edutech.example.com">info@edutech.example.com</a></li>
+            <li><a href="#">Soporte técnico</a></li>
+            <li>
+              <a href="https://classroom.google.com/c/Nzk3MjkzNzcwOTY4?cjc=f7xirzth"
+                 target="_blank" rel="noopener">
+                Google Classroom ↗
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 EduTech Campus Virtual. Todos los derechos reservados.<br/>
+           Contenido protegido bajo la <a href="https://www.wipo.int/copyright/es/" target="_blank" rel="noopener">Ley de Derechos de Autor</a>.
+           Uso educativo permitido con atribución.
+        </p>
+        <div class="footer-links" aria-label="Legal">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos de uso</a>
+          <a href="#">Accesibilidad</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

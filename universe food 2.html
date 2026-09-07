@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>UniverseFood – Nutrición Personalizada</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #E0F4FF;
+    --sky-mid: #BAE8FF;
+    --sky-dark: #7DD3F5;
+    --green: #D4F5D4;
+    --green-mid: #A8E6A8;
+    --green-dark: #5DBF5D;
+    --red: #FF6B6B;
+    --red-light: #FFE0E0;
+    --yellow: #FFE066;
+    --yellow-light: #FFF8D6;
+    --white: #FFFFFF;
+    --text: #2D3748;
+    --text-soft: #718096;
+    --card-bg: rgba(255,255,255,0.85);
+    --radius: 20px;
+    --shadow: 0 4px 20px rgba(100,180,255,0.15);
+    --shadow-hover: 0 8px 30px rgba(100,180,255,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(145deg, #E8F7FF 0%, #F0FBF0 50%, #FFF9E6 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  /* PHONE FRAME */
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: var(--white);
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 2px #ddd;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: var(--sky-dark);
+    padding: 8px 20px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  /* SCREENS */
+  .screen { display: none; flex: 1; flex-direction: column; overflow-y: auto; }
+  .screen.active { display: flex; }
+
+  /* ========== LOGIN SCREEN ========== */
+  #screen-login {
+    background: linear-gradient(160deg, var(--sky) 0%, #fff 60%, var(--green) 100%);
+    align-items: center;
+    padding: 30px 30px 40px;
+  }
+
+  .login-logo {
+    margin-top: 20px;
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, var(--sky-dark), var(--green-dark));
+    border-radius: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px;
+    box-shadow: 0 8px 25px rgba(93,191,93,0.35);
+    animation: pop 0.6s ease;
+  }
+  @keyframes pop { 0%{transform:scale(0.5);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+  .login-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 30px;
+    background: linear-gradient(135deg, #2a9d8f, #43aa8b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-top: 14px;
+  }
+
+  .login-sub {
+    font-size: 13px; color: var(--text-soft);
+    text-align: center; margin-top: 6px; margin-bottom: 30px;
+    line-height: 1.5;
+  }
+
+  .login-form { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+
+  .input-group { position: relative; }
+  .input-group span {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 18px; pointer-events: none;
+  }
+  .input-group input {
+    width: 100%; padding: 14px 14px 14px 44px;
+    border: 2px solid var(--sky-mid);
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; color: var(--text);
+    background: rgba(255,255,255,0.9);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .input-group input:focus {
+    border-color: var(--sky-dark);
+    box-shadow: 0 0 0 3px rgba(125,211,245,0.25);
+  }
+
+  .btn-login {
+    background: linear-gradient(135deg, #43aa8b, var(--sky-dark));
+    color: white; border: none;
+    padding: 15px; border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px; font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(67,170,139,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(67,170,139,0.5); }
+
+  .login-hint {
+    font-size: 11px; color: var(--text-soft);
+    text-align: center; margin-top: 8px;
+  }
+
+  .login-error {
+    background: var(--red-light); border: 1px solid var(--red);
+    border-radius: 10px; padding: 10px 14px;
+    font-size: 13px; color: #c0392b;
+    text-align: center; display: none;
+  }
+
+  .decorative-pills {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center; margin-top: 24px;
+  }
+  .dpill {
+    background: var(--sky); border-radius: 20px;
+    padding: 5px 12px; font-size: 11px; font-weight: 700;
+    color: #2a9d8f;
+  }
+
+  /* ========== HOME SCREEN ========== */
+  #screen-home { background: var(--white); padding-bottom: 80px; }
+
+  .home-header {
+    background: linear-gradient(135deg, var(--sky-dark), #43aa8b);
+    padding: 20px 20px 30px;
+    position: relative; overflow: hidden;
+  }
+  .home-header::after {
+    content: '';
+    position: absolute; bottom: -15px; left: 0; right: 0;
+    height: 30px; background: white;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .home-header-top {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+  }
+  .welcome-text h2 { font-size: 18px; color: white; font-weight: 800; }
+  .welcome-text p { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .avatar {
+    width: 44px; height: 44px; background: rgba(255,255,255,0.25);
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; cursor: pointer;
+  }
+
+  .search-bar {
+    background: rgba(255,255,255,0.95); border-radius: 14px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-soft); margin-top: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .home-body { padding: 24px 16px 0; }
+
+  .section-title {
+    font-size: 16px; font-weight: 800; color: var(--text);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+  }
+
+  /* PROFILE CARDS */
+  .profile-scroll {
+    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .profile-scroll::-webkit-scrollbar { display: none; }
+
+  .profile-card {
+    flex-shrink: 0; width: 90px;
+    background: var(--sky);
+    border-radius: 16px; padding: 12px 8px;
+    text-align: center; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    border: 2px solid transparent;
+  }
+  .profile-card:hover, .profile-card.selected {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--sky-dark);
+    background: var(--sky-mid);
+  }
+  .profile-card .icon { font-size: 28px; margin-bottom: 4px; }
+  .profile-card .label { font-size: 10px; font-weight: 700; color: var(--text); line-height: 1.2; }
+
+  /* QUICK STATS */
+  .quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .stat-card {
+    border-radius: 16px; padding: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .stat-card:nth-child(1) { background: var(--yellow-light); }
+  .stat-card:nth-child(2) { background: var(--green); }
+  .stat-card:nth-child(3) { background: var(--red-light); }
+  .stat-card:nth-child(4) { background: var(--sky); }
+  .stat-icon { font-size: 28px; }
+  .stat-info .val { font-size: 18px; font-weight: 900; color: var(--text); }
+  .stat-info .lbl { font-size: 10px; color: var(--text-soft); font-weight: 600; }
+
+  /* ========== BOTTOM NAV ========== */
+  .bottom-nav {
+    position: sticky; bottom: 0;
+    background: white;
+    border-top: 1px solid #f0f0f0;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 12px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    z-index: 100;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 3px; cursor: pointer; padding: 4px 0;
+    transition: transform 0.2s;
+  }
+  .nav-item:hover { transform: translateY(-2px); }
+  .nav-item .nav-icon { font-size: 22px; }
+  .nav-item .nav-label { font-size: 9px; font-weight: 700; color: var(--text-soft); }
+  .nav-item.active .nav-label { color: var(--sky-dark); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 4px rgba(125,211,245,0.8)); }
+
+  /* ========== MENU SCREEN ========== */
+  #screen-menu { background: #f8fbff; padding-bottom: 80px; }
+
+  .screen-header {
+    background: linear-gradient(135deg, #43aa8b, var(--sky-dark));
+    padding: 20px 20px 35px; position: relative; overflow: hidden;
+  }
+  .screen-header::after {
+    content: ''; position: absolute; bottom: -15px; left: 0; right: 0;
+    height: 30px; background: #f8fbff; border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .screen-header h2 { font-size: 20px; font-weight: 900; color: white; }
+  .screen-header p { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+
+  .profile-selector {
+    padding: 20px 16px 0;
+  }
+  .profile-selector select {
+    width: 100%; padding: 12px 16px;
+    border: 2px solid var(--sky-mid);
+    border-radius: 14px; font-family: 'Nunito', sans-serif;
+    font-size: 14px; color: var(--text); background: white;
+    outline: none; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+
+  .week-tabs {
+    display: flex; gap: 6px; padding: 14px 16px 0;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .week-tabs::-webkit-scrollbar { display: none; }
+  .day-tab {
+    flex-shrink: 0; padding: 8px 14px;
+    border-radius: 20px; font-size: 12px; font-weight: 700;
+    cursor: pointer; background: white;
+    border: 2px solid var(--sky-mid); color: var(--text-soft);
+    transition: all 0.2s;
+  }
+  .day-tab.active { background: var(--sky-dark); color: white; border-color: var(--sky-dark); }
+
+  .menu-grid { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .meal-card {
+    background: white; border-radius: 18px;
+    padding: 14px; box-shadow: var(--shadow);
+    display: flex; align-items: flex-start; gap: 12px;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  .meal-time-badge {
+    flex-shrink: 0; padding: 6px 10px;
+    border-radius: 10px; font-size: 10px; font-weight: 800;
+    text-align: center; min-width: 65px;
+  }
+  .badge-breakfast { background: var(--yellow-light); color: #b8860b; }
+  .badge-lunch { background: var(--green); color: #2d6a4f; }
+  .badge-dinner { background: var(--sky); color: #1a6b9a; }
+  .badge-snack { background: var(--red-light); color: #c0392b; }
+
+  .meal-info h4 { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .meal-info p { font-size: 11px; color: var(--text-soft); line-height: 1.4; }
+  .meal-cals { font-size: 11px; font-weight: 700; color: var(--green-dark); margin-top: 4px; }
+
+  /* ========== RECIPES SCREEN ========== */
+  #screen-recipes { background: #f8fbff; padding-bottom: 80px; }
+
+  .recipe-filter-tabs {
+    display: flex; gap: 6px; padding: 14px 16px 0;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .recipe-filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tab {
+    flex-shrink: 0; padding: 7px 14px;
+    border-radius: 20px; font-size: 11px; font-weight: 700;
+    cursor: pointer; background: white;
+    border: 2px solid var(--sky-mid); color: var(--text-soft);
+    transition: all 0.2s;
+  }
+  .filter-tab.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+
+  .time-tabs {
+    display: flex; gap: 6px; padding: 10px 16px 0;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .time-tabs::-webkit-scrollbar { display: none; }
+  .time-tab {
+    flex-shrink: 0; padding: 6px 12px;
+    border-radius: 20px; font-size: 10px; font-weight: 700;
+    cursor: pointer; background: var(--sky);
+    border: 2px solid var(--sky-mid); color: var(--text);
+    transition: all 0.2s;
+  }
+  .time-tab.active { background: var(--sky-dark); color: white; border-color: var(--sky-dark); }
+
+  .recipes-grid { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .recipe-card {
+    background: white; border-radius: 18px;
+    box-shadow: var(--shadow); overflow: hidden;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    animation: slideIn 0.3s ease;
+  }
+  .recipe-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+
+  .recipe-card-header {
+    padding: 14px; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .recipe-emoji { font-size: 36px; flex-shrink: 0; }
+  .recipe-info h4 { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .recipe-info p { font-size: 11px; color: var(--text-soft); line-height: 1.4; }
+  .recipe-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .recipe-tag {
+    font-size: 9px; font-weight: 700; padding: 3px 8px;
+    border-radius: 8px; background: var(--sky); color: #1a6b9a;
+  }
+  .recipe-tag.green { background: var(--green); color: #2d6a4f; }
+  .recipe-tag.yellow { background: var(--yellow-light); color: #b8860b; }
+  .recipe-tag.red { background: var(--red-light); color: #c0392b; }
+
+  .recipe-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 10px 14px; display: flex; justify-content: space-between;
+    font-size: 11px; font-weight: 700; color: var(--text-soft);
+  }
+
+  /* RECIPE DETAIL MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 200;
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: white; width: 390px;
+    border-radius: 24px 24px 0 0;
+    max-height: 85vh; overflow-y: auto;
+    padding: 20px; animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+  .modal-handle {
+    width: 40px; height: 4px; background: #ddd;
+    border-radius: 2px; margin: 0 auto 16px;
+  }
+  .modal-recipe-emoji { font-size: 52px; text-align: center; margin-bottom: 12px; }
+  .modal-recipe-title { font-size: 20px; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 6px; }
+  .modal-recipe-desc { font-size: 12px; color: var(--text-soft); text-align: center; margin-bottom: 16px; line-height: 1.5; }
+
+  .modal-section { margin-bottom: 14px; }
+  .modal-section h5 { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .ingredient-list { display: flex; flex-direction: column; gap: 6px; }
+  .ingredient-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text);
+    background: var(--sky); border-radius: 10px; padding: 7px 10px;
+  }
+  .steps-list { display: flex; flex-direction: column; gap: 8px; }
+  .step-item { display: flex; gap: 10px; align-items: flex-start; }
+  .step-num {
+    flex-shrink: 0; width: 22px; height: 22px;
+    background: var(--green-dark); color: white;
+    border-radius: 50%; font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-text { font-size: 12px; color: var(--text); line-height: 1.5; padding-top: 2px; }
+
+  .btn-close-modal {
+    width: 100%; padding: 14px; background: var(--sky-dark);
+    color: white; border: none; border-radius: 14px;
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+    cursor: pointer; margin-top: 16px;
+  }
+
+  /* ========== SHOPPING LIST ========== */
+  #screen-shopping { background: #f8fbff; padding-bottom: 80px; }
+
+  .shopping-profile-select {
+    padding: 16px 16px 0;
+  }
+  .shopping-profile-select select {
+    width: 100%; padding: 12px 16px;
+    border: 2px solid var(--green-mid); border-radius: 14px;
+    font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text);
+    background: white; outline: none; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+
+  .shopping-categories { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .category-block { background: white; border-radius: 18px; padding: 14px; box-shadow: var(--shadow); }
+  .category-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-size: 14px; font-weight: 800; color: var(--text);
+  }
+  .category-icon { font-size: 20px; }
+
+  .shopping-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+  }
+  .shopping-item:last-child { border-bottom: none; }
+  .item-check {
+    width: 20px; height: 20px; border-radius: 6px;
+    border: 2px solid var(--sky-mid); background: white;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .shopping-item.checked .item-check {
+    background: var(--green-dark); border-color: var(--green-dark);
+    color: white; font-size: 12px;
+  }
+  .item-name { flex: 1; font-size: 13px; color: var(--text); font-weight: 600; }
+  .shopping-item.checked .item-name { text-decoration: line-through; color: var(--text-soft); }
+  .item-qty { font-size: 11px; font-weight: 700; color: var(--text-soft); }
+
+  .shopping-summary {
+    margin: 0 16px 16px; background: linear-gradient(135deg, var(--green), var(--sky-mid));
+    border-radius: 18px; padding: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .summary-text h4 { font-size: 15px; font-weight: 900; color: var(--text); }
+  .summary-text p { font-size: 11px; color: var(--text-soft); }
+  .summary-progress {
+    width: 52px; height: 52px; position: relative;
+  }
+  .progress-ring { transform: rotate(-90deg); }
+  .progress-circle-bg { fill: none; stroke: rgba(255,255,255,0.5); stroke-width: 4; }
+  .progress-circle { fill: none; stroke: var(--green-dark); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
+  .progress-pct {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: var(--text);
+  }
+
+  /* ========== PROFILE SCREEN ========== */
+  #screen-profile { background: #f8fbff; padding-bottom: 80px; }
+
+  .profile-hero {
+    background: linear-gradient(135deg, var(--sky-dark), #43aa8b);
+    padding: 30px 20px 50px; text-align: center; position: relative; overflow: hidden;
+  }
+  .profile-hero::after {
+    content: ''; position: absolute; bottom: -15px; left: 0; right: 0;
+    height: 30px; background: #f8fbff;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .profile-avatar-big {
+    width: 80px; height: 80px; background: rgba(255,255,255,0.3);
+    border-radius: 24px; display: flex; align-items: center; justify-content: center;
+    font-size: 38px; margin: 0 auto 12px;
+    border: 3px solid rgba(255,255,255,0.5);
+  }
+  .profile-hero h2 { font-size: 20px; font-weight: 900; color: white; }
+  .profile-hero p { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+
+  .profile-body { padding: 24px 16px 0; }
+
+  .condition-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .condition-card {
+    background: white; border-radius: 16px; padding: 14px;
+    box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: transform 0.2s;
+  }
+  .condition-card:hover { transform: translateX(4px); }
+  .condition-icon { font-size: 28px; flex-shrink: 0; }
+  .condition-info h4 { font-size: 13px; font-weight: 800; color: var(--text); }
+  .condition-info p { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+  .condition-arrow { margin-left: auto; font-size: 14px; color: var(--text-soft); }
+
+  .btn-logout {
+    margin: 20px 16px; width: calc(100% - 32px);
+    padding: 14px; background: var(--red-light);
+    color: var(--red); border: 2px solid var(--red);
+    border-radius: 14px; font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 800;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-logout:hover { background: var(--red); color: white; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 40px 20px;
+    font-size: 13px; color: var(--text-soft);
+  }
+  .empty-state .big-icon { font-size: 52px; margin-bottom: 12px; }
+  .empty-state h4 { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+
+  /* Scroll padding for bottom nav */
+  .scroll-content { overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>🌐 UniverseFood</span>
+    <span>🔋 100%</span>
+  </div>
+
+  <!-- ============ LOGIN SCREEN ============ -->
+  <div class="screen active" id="screen-login">
+    <div class="login-logo">🌿</div>
+    <div class="login-title">UniverseFood</div>
+    <p class="login-sub">Tu guía de nutrición personalizada<br>según tu condición de salud</p>
+
+    <div class="login-form">
+      <div class="input-group">
+        <span>👤</span>
+        <input type="text" id="login-user" placeholder="Usuario" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <span>🔒</span>
+        <input type="password" id="login-pass" placeholder="Contraseña">
+      </div>
+      <div class="login-error" id="login-error">❌ Usuario o contraseña incorrectos</div>
+      <button class="btn-login" onclick="doLogin()">Ingresar →</button>
+      <p class="login-hint">Demo: usuario <strong>admin</strong> / contraseña <strong>1234</strong></p>
+    </div>
+
+    <div class="decorative-pills">
+      <span class="dpill">🩺 Diabetes</span>
+      <span class="dpill">🏃 Deporte</span>
+      <span class="dpill">🥗 Vegano</span>
+      <span class="dpill">💊 Anemia</span>
+      <span class="dpill">🫀 Presión</span>
+      <span class="dpill">🌾 Alergias</span>
+    </div>
+  </div>
+
+  <!-- ============ HOME SCREEN ============ -->
+  <div class="screen" id="screen-home">
+    <div class="home-header">
+      <div class="home-header-top">
+        <div class="welcome-text">
+          <h2>¡Hola, Admin! 👋</h2>
+          <p>¿Cómo te sientes hoy?</p>
+        </div>
+        <div class="avatar" onclick="goTo('profile')">👤</div>
+      </div>
+      <div class="search-bar">
+        <span>🔍</span>
+        <span>Buscar recetas, alimentos...</span>
+      </div>
+    </div>
+
+    <div class="home-body">
+      <div class="section-title">🎯 Selecciona tu Perfil</div>
+      <div class="profile-scroll" id="home-profiles">
+        <div class="profile-card selected" onclick="selectHomeProfile(this,'diabetes')">
+          <div class="icon">🩺</div>
+          <div class="label">Diabetes</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'deportista')">
+          <div class="icon">🏃</div>
+          <div class="label">Deportista</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'vegetariano')">
+          <div class="icon">🥗</div>
+          <div class="label">Vegetariano</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'vegano')">
+          <div class="icon">🌱</div>
+          <div class="label">Vegano</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'alergias')">
+          <div class="icon">🌾</div>
+          <div class="label">Alergias</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'gastritis')">
+          <div class="icon">🫁</div>
+          <div class="label">Gastritis</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'hipertension')">
+          <div class="icon">🫀</div>
+          <div class="label">Hipertensión</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'anemia')">
+          <div class="icon">💊</div>
+          <div class="label">Anemia</div>
+        </div>
+        <div class="profile-card" onclick="selectHomeProfile(this,'leucemia')">
+          <div class="icon">🧬</div>
+          <div class="label">Leucemia</div>
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-icon">🍽️</div>
+          <div class="stat-info">
+            <div class="val">4</div>
+            <div class="lbl">Comidas hoy</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💧</div>
+          <div class="stat-info">
+            <div class="val">6/8</div>
+            <div class="lbl">Vasos de agua</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <div class="val">21</div>
+            <div class="lbl">Recetas disp.</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🛒</div>
+          <div class="stat-info">
+            <div class="val">12</div>
+            <div class="lbl">Lista compras</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:20px">✨ Consejo del día</div>
+      <div style="background:linear-gradient(135deg,var(--yellow-light),var(--green));border-radius:18px;padding:16px;margin-bottom:10px;">
+        <div style="font-size:24px;margin-bottom:6px">💡</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text)" id="tip-text">Consume vegetales de hoja verde diariamente; son ricos en hierro y vitaminas esenciales para tu metabolismo.</div>
+      </div>
+    </div>
+    <div class="bottom-nav" id="nav-home">
+      <div class="nav-item active" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Inicio</div></div>
+      <div class="nav-item" onclick="goTo('menu')"><div class="nav-icon">📅</div><div class="nav-label">Menú</div></div>
+      <div class="nav-item" onclick="goTo('recipes')"><div class="nav-icon">📖</div><div class="nav-label">Recetas</div></div>
+      <div class="nav-item" onclick="goTo('shopping')"><div class="nav-icon">🛒</div><div class="nav-label">Compras</div></div>
+      <div class="nav-item" onclick="goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Perfil</div></div>
+    </div>
+  </div>
+
+  <!-- ============ MENU SCREEN ============ -->
+  <div class="screen" id="screen-menu">
+    <div class="screen-header">
+      <h2>📅 Menú Semanal</h2>
+      <p>Personalizado según tu condición</p>
+    </div>
+    <div class="profile-selector">
+      <select id="menu-profile" onchange="renderMenu()">
+        <option value="diabetes">🩺 Diabetes</option>
+        <option value="deportista">🏃 Deportista</option>
+        <option value="vegetariano">🥗 Vegetariano</option>
+        <option value="vegano">🌱 Vegano</option>
+        <option value="alergias">🌾 Alergias Alimentarias</option>
+        <option value="gastritis">🫁 Gastritis</option>
+        <option value="hipertension">🫀 Hipertensión</option>
+        <option value="anemia">💊 Anemia</option>
+        <option value="leucemia">🧬 Leucemia</option>
+      </select>
+    </div>
+    <div class="week-tabs" id="week-tabs"></div>
+    <div class="menu-grid" id="menu-grid"></div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Inicio</div></div>
+      <div class="nav-item active" onclick="goTo('menu')"><div class="nav-icon">📅</div><div class="nav-label">Menú</div></div>
+      <div class="nav-item" onclick="goTo('recipes')"><div class="nav-icon">📖</div><div class="nav-label">Recetas</div></div>
+      <div class="nav-item" onclick="goTo('shopping')"><div class="nav-icon">🛒</div><div class="nav-label">Compras</div></div>
+      <div class="nav-item" onclick="goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Perfil</div></div>
+    </div>
+  </div>
+
+  <!-- ============ RECIPES SCREEN ============ -->
+  <div class="screen" id="screen-recipes">
+    <div class="screen-header">
+      <h2>📖 Recetas Saludables</h2>
+      <p>Filtradas según tu condición médica</p>
+    </div>
+    <div class="recipe-filter-tabs" id="recipe-filter-tabs"></div>
+    <div class="time-tabs" id="recipe-time-tabs"></div>
+    <div class="recipes-grid" id="recipes-grid"></div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Inicio</div></div>
+      <div class="nav-item" onclick="goTo('menu')"><div class="nav-icon">📅</div><div class="nav-label">Menú</div></div>
+      <div class="nav-item active" onclick="goTo('recipes')"><div class="nav-icon">📖</div><div class="nav-label">Recetas</div></div>
+      <div class="nav-item" onclick="goTo('shopping')"><div class="nav-icon">🛒</div><div class="nav-label">Compras</div></div>
+      <div class="nav-item" onclick="goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Perfil</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SHOPPING SCREEN ============ -->
+  <div class="screen" id="screen-shopping">
+    <div class="screen-header">
+      <h2>🛒 Lista de Compras</h2>
+      <p>Generada automáticamente para tu menú</p>
+    </div>
+    <div class="shopping-profile-select">
+      <select id="shop-profile" onchange="renderShopping()">
+        <option value="diabetes">🩺 Diabetes</option>
+        <option value="deportista">🏃 Deportista</option>
+        <option value="vegetariano">🥗 Vegetariano</option>
+        <option value="vegano">🌱 Vegano</option>
+        <option value="alergias">🌾 Alergias Alimentarias</option>
+        <option value="gastritis">🫁 Gastritis</option>
+        <option value="hipertension">🫀 Hipertensión</option>
+        <option value="anemia">💊 Anemia</option>
+        <option value="leucemia">🧬 Leucemia</option>
+      </select>
+    </div>
+    <div id="shopping-summary-box"></div>
+    <div class="shopping-categories" id="shopping-categories"></div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Inicio</div></div>
+      <div class="nav-item" onclick="goTo('menu')"><div class="nav-icon">📅</div><div class="nav-label">Menú</div></div>
+      <div class="nav-item" onclick="goTo('recipes')"><div class="nav-icon">📖</div><div class="nav-label">Recetas</div></div>
+      <div class="nav-item active" onclick="goTo('shopping')"><div class="nav-icon">🛒</div><div class="nav-label">Compras</div></div>
+      <div class="nav-item" onclick="goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Perfil</div></div>
+    </div>
+  </div>
+
+  <!-- ============ PROFILE SCREEN ============ -->
+  <div class="screen" id="screen-profile">
+    <div class="profile-hero">
+      <div class="profile-avatar-big">👤</div>
+      <h2>Administrador</h2>
+      <p>Perfil activo: <strong id="profile-active-label">Diabetes</strong></p>
+    </div>
+    <div class="profile-body">
+      <div class="section-title">🩺 Condiciones Médicas</div>
+      <div class="condition-cards">
+        <div class="condition-card" onclick="setProfileAndGo('diabetes','menu')">
+          <div class="condition-icon">🩺</div>
+          <div class="condition-info"><h4>Diabetes</h4><p>Menú bajo en azúcares y carbohidratos simples</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('deportista','menu')">
+          <div class="condition-icon">🏃</div>
+          <div class="condition-info"><h4>Deportistas</h4><p>Alto en proteínas y carbohidratos complejos</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('vegetariano','menu')">
+          <div class="condition-icon">🥗</div>
+          <div class="condition-info"><h4>Vegetariano</h4><p>Sin carne, rico en vegetales y proteínas vegetales</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('vegano','menu')">
+          <div class="condition-icon">🌱</div>
+          <div class="condition-info"><h4>Vegano</h4><p>100% origen vegetal, sin productos animales</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('alergias','menu')">
+          <div class="condition-icon">🌾</div>
+          <div class="condition-info"><h4>Alergias Alimentarias</h4><p>Sin gluten, sin lactosa, sin mariscos, sin nueces</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('gastritis','menu')">
+          <div class="condition-icon">🫁</div>
+          <div class="condition-info"><h4>Gastritis</h4><p>Alimentos suaves, bajos en acidez</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('hipertension','menu')">
+          <div class="condition-icon">🫀</div>
+          <div class="condition-info"><h4>Hipertensión</h4><p>Bajo en sodio, rico en potasio y magnesio</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('anemia','menu')">
+          <div class="condition-icon">💊</div>
+          <div class="condition-info"><h4>Anemia</h4><p>Rico en hierro, vitamina B12 y ácido fólico</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+        <div class="condition-card" onclick="setProfileAndGo('leucemia','menu')">
+          <div class="condition-icon">🧬</div>
+          <div class="condition-info"><h4>Leucemia</h4><p>Alimentos reforzantes del sistema inmune</p></div>
+          <div class="condition-arrow">›</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">🚪 Cerrar Sesión</button>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Inicio</div></div>
+      <div class="nav-item" onclick="goTo('menu')"><div class="nav-icon">📅</div><div class="nav-label">Menú</div></div>
+      <div class="nav-item" onclick="goTo('recipes')"><div class="nav-icon">📖</div><div class="nav-label">Recetas</div></div>
+      <div class="nav-item" onclick="goTo('shopping')"><div class="nav-icon">🛒</div><div class="nav-label">Compras</div></div>
+      <div class="nav-item active" onclick="goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Perfil</div></div>
+    </div>
+  </div>
+
+  <!-- RECIPE DETAIL MODAL -->
+  <div class="modal-overlay" id="recipe-modal" onclick="closeModal(event)">
+    <div class="modal-sheet" id="modal-content">
+      <div class="modal-handle"></div>
+      <div id="modal-body"></div>
+      <button class="btn-close-modal" onclick="document.getElementById('recipe-modal').classList.remove('open')">✓ Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== AUTH =====
+const USERS = { admin: '1234', usuario: 'pass123', nutricion: 'salud2024' };
+let currentProfile = 'diabetes';
+let selectedDay = 0;
+let selectedRecipeFilter = 'diabetes';
+let selectedTimeFilter = 'all';
+let checkedItems = {};
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  if (USERS[u] && USERS[u] === p) {
+    err.style.display = 'none';
+    goTo('home');
+    initMenu(); initRecipes(); initShopping();
+  } else {
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+}
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('login-user').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogout() {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-login').classList.add('active');
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+}
+
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+}
+
+function selectHomeProfile(el, profile) {
+  document.querySelectorAll('.profile-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  currentProfile = profile;
+  updateTip(profile);
+}
+
+function setProfileAndGo(profile, screen) {
+  currentProfile = profile;
+  document.getElementById('menu-profile').value = profile;
+  document.getElementById('shop-profile').value = profile;
+  renderMenu(); renderShopping();
+  document.getElementById('profile-active-label').textContent = PROFILE_LABELS[profile];
+  goTo(screen);
+}
+
+const PROFILE_LABELS = {
+  diabetes:'Diabetes', deportista:'Deportista', vegetariano:'Vegetariano',
+  vegano:'Vegano', alergias:'Alergias', gastritis:'Gastritis',
+  hipertension:'Hipertensión', anemia:'Anemia', leucemia:'Leucemia'
+};
+
+const TIPS = {
+  diabetes: 'Prefiere carbohidratos de bajo índice glucémico como quinoa, avena y legumbres para estabilizar tu azúcar.',
+  deportista: 'Consume proteínas dentro de los 30 minutos post-entrenamiento para optimizar la recuperación muscular.',
+  vegetariano: 'Combina legumbres con cereales integrales para obtener una proteína completa en cada comida.',
+  vegano: 'Suplementa con vitamina B12 y omega-3 de origen vegetal (semillas de chía y linaza).',
+  alergias: 'Lee siempre las etiquetas de los alimentos y comunica tus alergias en restaurantes.',
+  gastritis: 'Come en porciones pequeñas cada 3 horas y evita el café, picantes y cítricos.',
+  hipertension: 'Reduce el sodio aumentando el potasio: consume plátano, aguacate y espinacas a diario.',
+  anemia: 'Acompaña las fuentes de hierro con vitamina C para triplicar su absorción.',
+  leucemia: 'Prioriza alimentos antioxidantes y antiinflamatorios: bayas, cúrcuma y verduras crucíferas.'
+};
+function updateTip(p) {
+  document.getElementById('tip-text').textContent = TIPS[p] || TIPS.diabetes;
+}
+
+// ===== WEEKLY MENU DATA =====
+const DAYS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+const MENUS = {
+  diabetes: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Avena con canela y manzana verde',desc:'Avena integral, rodajas de manzana verde, canela, stevia',cals:'280 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Pechuga a la plancha con ensalada',desc:'Pechuga de pollo, ensalada verde, aceite de oliva, limón',cals:'380 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Sopa de verduras sin papa',desc:'Zanahoria, apio, espinaca, calabacín, caldo sin sal',cals:'210 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Almendras y nueces',desc:'20 g de almendras sin sal, nueces naturales',cals:'160 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Huevos revueltos con espinaca',desc:'2 huevos, espinaca fresca, tomate, sin aceite vegetal',cals:'260 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Quinoa con vegetales salteados',desc:'Quinoa, pimiento, cebolla, zucchini, aceite de oliva',cals:'340 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Tilapia al vapor con brócoli',desc:'Filete de tilapia, brócoli al vapor, limón y hierbas',cals:'290 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Yogur griego sin azúcar',desc:'Yogur griego natural, semillas de chía',cals:'120 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Batido verde sin azúcar',desc:'Espinaca, pepino, limón, jengibre, agua',cals:'90 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Lentejas guisadas',desc:'Lentejas, zanahoria, cebolla, ajo, comino bajo sodio',cals:'310 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Tortilla de claras y champiñones',desc:'4 claras de huevo, champiñones, tomillo fresco',cals:'200 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Pepino con hummus',desc:'Tiras de pepino, 2 cdas de hummus casero',cals:'110 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Tostada integral con aguacate',desc:'Pan integral, aguacate, tomate, orégano',cals:'270 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Salmón con espárragos',desc:'Salmón al horno, espárragos, limón, eneldo',cals:'390 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Ensalada de garbanzos y kale',desc:'Garbanzos cocidos, kale, cebolla morada, aceite de oliva',cals:'280 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Fresas frescas',desc:'1 taza de fresas naturales sin azúcar añadida',cals:'50 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Chia pudding con coco',desc:'Semillas de chía, leche de coco light, stevia, arándanos',cals:'230 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Pollo al curry con arroz integral',desc:'Pechuga, curry sin sal, arroz integral, yogur',cals:'400 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Crema de calabaza',desc:'Calabaza, cebolla, ajo, caldo vegetal, nuez moscada',cals:'190 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Celery con crema de maní',desc:'Tallos de apio, 1 cda crema de maní sin azúcar',cals:'130 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Panqueques de avena sin harina',desc:'Avena, huevo, banano verde, canela, sin azúcar',cals:'310 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Atún en lata con ensalada',desc:'Atún en agua, lechuga, tomate, aceite de oliva, limón',cals:'300 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Revuelto de tofu y vegetales',desc:'Tofu firme, pimiento, cebolla, cúrcuma, pimienta',cals:'250 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Manzana con canela',desc:'1 manzana verde con canela en polvo',cals:'80 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Omelette mediterráneo',desc:'3 claras, aceitunas, tomate, albahaca fresca',cals:'240 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Ensalada niçoise ligera',desc:'Lechuga, atún, huevo duro, judías verdes, aceite de oliva',cals:'360 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Puré de coliflor con hierbas',desc:'Coliflor cocida, ajo, leche descremada, hierbas frescas',cals:'180 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Batido de proteínas verde',desc:'Espinaca, leche de almendra, proteína en polvo sin azúcar',cals:'140 kcal'},
+    ],
+  ],
+  deportista: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Batido proteico de banano',desc:'Banano, leche, proteína whey, avena, miel',cals:'520 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Arroz integral con pollo y aguacate',desc:'Arroz integral, pechuga a la plancha, aguacate, ensalada',cals:'680 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Pasta integral con carne magra',desc:'Pasta integral, carne molida magra, salsa de tomate',cals:'590 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Mezcla de frutos secos',desc:'Nueces, almendras, pasas, chía, arándanos secos',cals:'280 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Avena proteica con frutas',desc:'Avena, leche, proteína vegetal, mango, miel de abeja',cals:'480 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Salmón con batata y brócoli',desc:'Salmón al horno, camote asado, brócoli al vapor',cals:'640 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Pollo con quinoa y espinaca',desc:'Pechuga de pollo, quinoa cocida, espinaca salteada',cals:'560 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Yogur con granola',desc:'Yogur griego, granola sin azúcar, frutos del bosque',cals:'320 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Tostadas con huevos y jamón pavo',desc:'Pan integral, 3 huevos, jamón de pavo, tomate',cals:'510 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Bowl de arroz con atún y vegetales',desc:'Arroz blanco, atún, edamame, zanahoria, salsa de soya',cals:'620 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Chuleta de cerdo magra con ensalada',desc:'Lomo de cerdo, ensalada verde, aceite de oliva',cals:'540 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Batido de recuperación',desc:'Leche, banano, cacao, proteína whey, miel',cals:'350 kcal'},
+    ],
+  ],
+  vegetariano: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Tostadas con aguacate y huevo',desc:'Pan integral, aguacate, huevo poché, tomate, limón',cals:'370 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Curry de garbanzos y espinaca',desc:'Garbanzos, espinaca, leche de coco, curry, arroz basmati',cals:'450 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Pasta con pesto y mozarella',desc:'Pasta integral, pesto de albahaca, tomates cherry, mozarella',cals:'480 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Frutas con yogur',desc:'Yogur griego, fresas, kiwi, semillas de girasol',cals:'200 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Pancakes de espinaca y queso',desc:'Espinaca, harina integral, huevo, queso parmesano rallado',cals:'340 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Wrap vegetariano',desc:'Tortilla integral, hummus, vegetales asados, queso feta',cals:'420 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Sopa de lentejas rojas',desc:'Lentejas rojas, tomate, comino, cilantro, limón',cals:'310 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Queso con frutas y nueces',desc:'Queso manchego, uvas, nueces, miel',cals:'250 kcal'},
+    ],
+  ],
+  vegano: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Smoothie bowl de açaí',desc:'Açaí, banano, granola sin miel, frutas, semillas de hemp',cals:'380 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Bowl de quinoa con tempeh',desc:'Quinoa, tempeh al horno, aguacate, edamame, miso',cals:'490 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Curry de lentejas y coco',desc:'Lentejas, leche de coco, curry, espinaca, arroz integral',cals:'440 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Dátiles con crema de almendra',desc:'6 dátiles naturales, 1 cda crema de almendra orgánica',cals:'220 kcal'},
+    ],
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Tostadas con tofu scramble',desc:'Pan de centeno, tofu revuelto con cúrcuma y pimiento',cals:'340 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Buddha bowl',desc:'Arroz integral, garbanzos asados, kale, remolacha, tahini',cals:'510 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Stir fry de tofu y vegetales',desc:'Tofu firme, brócoli, zanahoria, salsa de soya, jengibre',cals:'380 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Leche dorada de cúrcuma',desc:'Leche de avena, cúrcuma, pimienta, jengibre, canela',cals:'90 kcal'},
+    ],
+  ],
+  alergias: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Porridge de arroz con frutas',desc:'Arroz integral, leche de coco, mango, vainilla (sin gluten)',cals:'300 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Pechuga con arroz y verduras',desc:'Pollo sin adobo, arroz blanco, zanahorias, calabacín',cals:'420 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Sopa de pollo sin gluten',desc:'Caldo de pollo, pollo desmenuzado, zanahoria, sin fideos',cals:'250 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Fruta fresca y semillas',desc:'Plátano, papaya, semillas de girasol (sin frutos secos)',cals:'150 kcal'},
+    ],
+  ],
+  gastritis: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Avena suave con miel',desc:'Avena cocida, leche descremada, miel, sin canela',cals:'260 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Puré de papa con pollo',desc:'Papa cocida, pollo hervido desmenuzado, zanahoria',cals:'370 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Sopa de arroz blanco',desc:'Arroz blanco, caldo sin condimentos, pollo, zanahoria',cals:'240 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Galletas de arroz con queso fresco',desc:'2 galletas de arroz, queso fresco bajo en grasa',cals:'130 kcal'},
+    ],
+  ],
+  hipertension: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Avena con plátano y semillas',desc:'Avena sin sal, plátano, semillas de lino, leche de almendra',cals:'290 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Salmón con espinaca al vapor',desc:'Salmón sin sal añadida, espinaca, limón, aceite de oliva',cals:'380 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Ensalada de remolacha y nueces',desc:'Remolacha cocida, nueces, arúgula, vinagre balsámico',cals:'260 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Plátano con yogur',desc:'1 plátano maduro, yogur natural sin sal',cals:'180 kcal'},
+    ],
+  ],
+  anemia: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Espinaca con huevo y jugo de naranja',desc:'Huevos revueltos, espinaca, jugo de naranja natural fresco',cals:'310 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Hígado de pollo con arroz y limón',desc:'Hígado de pollo, arroz integral, ensalada de tomate y limón',cals:'430 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Lentejas con vegetales verdes',desc:'Lentejas, espinaca, kale, perejil, aceite de oliva',cals:'340 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Jugo de remolacha y naranja',desc:'Remolacha cruda, naranja, jengibre, zanahoria licuados',cals:'120 kcal'},
+    ],
+  ],
+  leucemia: [
+    [
+      {time:'Desayuno',badge:'badge-breakfast',name:'Batido de cúrcuma y frutas',desc:'Leche de almendra, cúrcuma, jengibre, mango, naranja',cals:'260 kcal'},
+      {time:'Almuerzo',badge:'badge-lunch',name:'Pollo con brócoli y ajo',desc:'Pechuga de pollo, brócoli, ajo, aceite de oliva, limón',cals:'380 kcal'},
+      {time:'Cena',badge:'badge-dinner',name:'Sopa de hongos shiitake',desc:'Hongos shiitake, caldo vegetal, ajo, jengibre, espinaca',cals:'210 kcal'},
+      {time:'Snack',badge:'badge-snack',name:'Arándanos y semillas de chía',desc:'1 taza de arándanos frescos, semillas de chía, miel',cals:'130 kcal'},
+    ],
+  ],
+};
+
+// ===== RECIPES DATA =====
+const RECIPES = [
+  // DIABETES
+  {id:1,profile:'diabetes',time:'desayuno',emoji:'🥣',name:'Avena Integral Diabética',desc:'Avena de cocción lenta que mantiene el azúcar estable',tags:['bajo IG','sin azúcar'],tagColors:['','green'],time_label:'20 min',kcal:'280 kcal',
+   ingredients:['1 taza avena integral','2 tazas agua','1 manzana verde rallada','1 cdita canela','1 cdita stevia','1 cdita chía'],
+   steps:['Hervir el agua con una pizca de sal.','Agregar la avena y cocinar a fuego bajo 15 min.','Incorporar la manzana rallada y la canela.','Endulzar con stevia al gusto.','Servir caliente con semillas de chía encima.']},
+  {id:2,profile:'diabetes',time:'almuerzo',emoji:'🥗',name:'Ensalada de Quinoa Diabética',desc:'Proteína completa de bajo índice glucémico',tags:['bajo IG','proteína'],tagColors:['','green'],time_label:'25 min',kcal:'320 kcal',
+   ingredients:['1 taza quinoa cocida','½ pepino en cubos','1 tomate','Espinaca fresca','1 cda aceite de oliva','Limón y sal con moderación'],
+   steps:['Cocinar la quinoa y enfriar.','Picar los vegetales en cubos pequeños.','Mezclar todo en un bol grande.','Aderezar con aceite de oliva y limón.','Agregar una pizca de sal marina y pimienta.']},
+  {id:3,profile:'diabetes',time:'cena',emoji:'🐟',name:'Tilapia al Limón con Espárragos',desc:'Proteína magra con fibra y bajo en carbohidratos',tags:['bajo IG','omega-3'],tagColors:['',''],time_label:'30 min',kcal:'290 kcal',
+   ingredients:['1 filete de tilapia','200g espárragos','1 limón','2 dientes de ajo','Aceite de oliva','Eneldo fresco'],
+   steps:['Marinar el filete con limón, ajo y eneldo 10 min.','Calentar una sartén antiadherente.','Cocinar el pescado 4 min por lado.','Cocinar los espárragos al vapor 5 min.','Servir con rodajas de limón y eneldo fresco.']},
+  {id:4,profile:'diabetes',time:'postre',emoji:'🍓',name:'Gelatina de Frutos Rojos sin Azúcar',desc:'Postre refrescante totalmente sin azúcar',tags:['sin azúcar','antioxidante'],tagColors:['red',''],time_label:'15 min',kcal:'60 kcal',
+   ingredients:['1 sobre gelatina sin sabor','Fresas, frambuesas, moras','Stevia al gusto','2 tazas agua','Menta fresca'],
+   steps:['Disolver la gelatina en agua caliente.','Endulzar con stevia y enfriar a temperatura ambiente.','Agregar las frutas en un molde.','Verter la gelatina sobre las frutas.','Refrigerar 4 horas. Servir con menta.']},
+  {id:5,profile:'diabetes',time:'bebidas',emoji:'🥤',name:'Batido Verde Regulador de Glucosa',desc:'Bebida que ayuda a controlar el azúcar en sangre',tags:['sin azúcar','detox'],tagColors:['green',''],time_label:'5 min',kcal:'80 kcal',
+   ingredients:['2 tazas espinaca','1 pepino','½ limón','1 trozo jengibre','½ manzana verde','1 taza agua fría'],
+   steps:['Lavar todos los ingredientes bien.','Licuar la espinaca con el agua primero.','Agregar el resto de ingredientes.','Procesar hasta consistencia suave.','Servir inmediatamente sin colar.']},
+  {id:6,profile:'diabetes',time:'snack',emoji:'🥑',name:'Tostada de Aguacate con Semillas',desc:'Snack nutritivo de bajo índice glucémico',tags:['bajo IG','fibra'],tagColors:['','green'],time_label:'10 min',kcal:'200 kcal',
+   ingredients:['1 rebanada pan integral','½ aguacate maduro','Semillas de chía','Tomate cherry','Limón y sal sin exceso'],
+   steps:['Tostar el pan integral.','Aplastar el aguacate con un tenedor.','Sazonar con limón y pimienta negra.','Esparcir sobre la tostada.','Agregar tomate cherry y semillas de chía.']},
+  {id:7,profile:'diabetes',time:'desayuno',emoji:'🥚',name:'Omelette de Claras con Vegetales',desc:'Alto en proteína, cero carbohidratos simples',tags:['sin azúcar','proteína'],tagColors:['red','green'],time_label:'15 min',kcal:'220 kcal',
+   ingredients:['4 claras de huevo','½ pimiento rojo','Champiñones','Espinaca','Aceite en spray','Sal y pimienta moderado'],
+   steps:['Batir las claras hasta espuma ligera.','Saltear los vegetales 3 min con spray de aceite.','Verter las claras en sartén caliente.','Agregar los vegetales al centro.','Doblar y cocinar 2 min más. Servir caliente.']},
+  {id:8,profile:'diabetes',time:'almuerzo',emoji:'🫘',name:'Lentejas Guisadas Mediterráneas',desc:'Legumbre rica en fibra y proteína vegetal',tags:['bajo IG','fibra'],tagColors:['','green'],time_label:'40 min',kcal:'310 kcal',
+   ingredients:['1 taza lentejas verdes','1 zanahoria','1 cebolla','2 tomates','2 ajos','Comino, cúrcuma, pimienta'],
+   steps:['Remojar las lentejas 2 horas previo.','Sofreír cebolla y ajo en aceite de oliva.','Añadir zanahoria y tomate picados.','Incorporar lentejas escurridas con caldo.','Cocinar 30 min a fuego medio con especias.']},
+  {id:9,profile:'diabetes',time:'cena',emoji:'🥦',name:'Crema de Brócoli sin Crema',desc:'Sopa cremosa baja en calorías y carbohidratos',tags:['bajo IG','detox'],tagColors:['','green'],time_label:'25 min',kcal:'180 kcal',
+   ingredients:['1 cabeza de brócoli','1 cebolla','3 ajos','Caldo vegetal bajo en sodio','Leche de almendra sin azúcar','Nuez moscada'],
+   steps:['Cocinar el brócoli al vapor 10 min.','Sofreír cebolla y ajo en aceite de oliva.','Licuar todo con caldo vegetal.','Agregar leche de almendra para cremosidad.','Condimentar con nuez moscada y servir caliente.']},
+  {id:10,profile:'diabetes',time:'batidos',emoji:'🥛',name:'Batido de Proteína sin Azúcar',desc:'Batido post-ejercicio especial para diabéticos',tags:['sin azúcar','proteína'],tagColors:['red','green'],time_label:'5 min',kcal:'180 kcal',
+   ingredients:['1 scoop proteína vegetal sin azúcar','1 taza leche de almendra sin azúcar','½ taza espinaca','1 cdita vainilla','Hielo al gusto'],
+   steps:['Colocar todos los ingredientes en la licuadora.','Agregar hielo al gusto.','Licuar por 30 segundos a alta velocidad.','Verificar la consistencia y agregar más leche si es necesario.','Servir inmediatamente y consumir en menos de 30 min.']},
+
+  // VEGETARIANO
+  {id:11,profile:'vegetariano',time:'almuerzo',emoji:'🍛',name:'Curry de Garbanzos al Coco',desc:'Plato vegetariano rico en proteína y sabor',tags:['vegetariano','sin carne'],tagColors:['green',''],time_label:'35 min',kcal:'450 kcal',
+   ingredients:['2 tazas garbanzos cocidos','1 lata leche de coco','2 cdas pasta de curry','Espinaca fresca','Arroz basmati cocido','Cebolla y ajo'],
+   steps:['Sofreír cebolla y ajo con la pasta de curry.','Agregar la leche de coco y revolver bien.','Incorporar los garbanzos cocidos.','Cocinar 15 min a fuego medio.','Agregar espinaca al final y servir sobre arroz basmati.']},
+  {id:12,profile:'vegetariano',time:'desayuno',emoji:'🥞',name:'Pancakes de Espinaca y Queso',desc:'Desayuno nutritivo con proteína animal y vegetales',tags:['vegetariano','proteína'],tagColors:['green','green'],time_label:'20 min',kcal:'340 kcal',
+   ingredients:['1 taza harina integral','1 taza espinaca picada','2 huevos','½ taza leche','Queso parmesano rallado','Aceite de oliva'],
+   steps:['Mezclar harina, huevos y leche hasta obtener masa.','Incorporar la espinaca picada y el queso.','Calentar una sartén con aceite de oliva.','Verter porciones de masa y cocinar 3 min por lado.','Servir con yogur griego y hierbas frescas.']},
+  {id:13,profile:'vegetariano',time:'cena',emoji:'🍝',name:'Pasta con Pesto Casero y Nueces',desc:'Pasta integral con pesto fresco y proteína de nueces',tags:['vegetariano','omega-3'],tagColors:['green',''],time_label:'25 min',kcal:'490 kcal',
+   ingredients:['200g pasta integral','2 tazas albahaca','½ taza nueces','Queso parmesano','Aceite de oliva extra virgen','Ajo fresco'],
+   steps:['Cocinar la pasta al dente según indicaciones.','Procesar albahaca, nueces, ajo y aceite de oliva.','Agregar el parmesano rallado al pesto.','Mezclar la pasta caliente con el pesto.','Servir con nueces enteras y hojas de albahaca.']},
+  {id:14,profile:'vegetariano',time:'postre',emoji:'🍮',name:'Flan de Vainilla con Leche',desc:'Postre clásico vegetariano con ingredientes naturales',tags:['vegetariano','postre'],tagColors:['green','yellow'],time_label:'45 min',kcal:'220 kcal',
+   ingredients:['3 huevos','2 tazas leche entera','½ taza azúcar','1 cdita vainilla','Caramelo: ½ taza azúcar y agua'],
+   steps:['Preparar el caramelo: derretir azúcar con agua.','Mezclar huevos, leche, azúcar y vainilla.','Verter el caramelo en el molde.','Agregar la mezcla de flan encima.','Hornear en baño maría 40 min a 170°C.']},
+  {id:15,profile:'vegetariano',time:'bebidas',emoji:'🍹',name:'Limonada de Jengibre y Menta',desc:'Bebida refrescante natural y digestiva',tags:['vegetariano','refrescante'],tagColors:['green',''],time_label:'10 min',kcal:'60 kcal',
+   ingredients:['3 limones','1 trozo jengibre fresco','10 hojas de menta','2 cdas miel','3 tazas agua','Hielo'],
+   steps:['Exprimir los limones y reservar el jugo.','Rallar el jengibre y filtrar su jugo.','Mezclar limón, jengibre, miel y agua.','Agregar las hojas de menta machacadas.','Servir sobre hielo y decorar con menta.']},
+
+  // ALERGIAS
+  {id:16,profile:'alergias',time:'almuerzo',emoji:'🍗',name:'Pollo al Limón sin Alérgenos',desc:'Libre de gluten, lactosa, soya y frutos secos',tags:['sin gluten','sin lactosa'],tagColors:['red','yellow'],time_label:'30 min',kcal:'380 kcal',
+   ingredients:['1 pechuga de pollo','2 limones','Aceite de oliva','Ajo fresco','Romero y tomillo','Arroz blanco cocido'],
+   steps:['Marinar el pollo con limón, ajo y hierbas 15 min.','Precalentar el horno a 190°C.','Colocar el pollo en bandeja con aceite de oliva.','Hornear 25 min volteando a la mitad.','Servir sobre arroz blanco con ensalada simple.']},
+  {id:17,profile:'alergias',time:'desayuno',emoji:'🌾',name:'Porridge de Arroz sin Gluten',desc:'Desayuno suave libre de todos los alérgenos comunes',tags:['sin gluten','sin lactosa'],tagColors:['red','yellow'],time_label:'20 min',kcal:'280 kcal',
+   ingredients:['1 taza arroz blanco','2 tazas leche de coco','1 banano','Miel de abeja','Canela molida','Sal marina'],
+   steps:['Cocinar el arroz con la leche de coco a fuego lento.','Remover constantemente 15 min hasta cremoso.','Endulzar con miel y condimentar con canela.','Servir caliente en un bol.','Coronar con rodajas de banano fresco.']},
+
+  // POSTRES para todos
+  {id:18,profile:'all',time:'postre',emoji:'🍮',name:'Arroz con Leche de Coco Light',desc:'Postre tropical adaptado para dietas especiales',tags:['postre','vegano'],tagColors:['yellow','green'],time_label:'30 min',kcal:'180 kcal',
+   ingredients:['1 taza arroz integral','2 tazas leche de coco light','Stevia','Canela en rama','1 cdita vainilla','Coco rallado sin azúcar'],
+   steps:['Cocinar el arroz con la leche de coco y la rama de canela.','Remover frecuentemente a fuego bajo 25 min.','Retirar la canela y endulzar con stevia.','Agregar la vainilla y mezclar bien.','Servir tibio o frío con coco rallado encima.']},
+  {id:19,profile:'all',time:'postre',emoji:'🍦',name:'Helado de Mango sin Azúcar',desc:'Helado 100% natural con solo 2 ingredientes',tags:['sin azúcar','vegano'],tagColors:['red','green'],time_label:'5 min+freeze',kcal:'120 kcal',
+   ingredients:['3 mangos maduros congelados','½ taza leche de coco','1 cdita vainilla','Opcional: stevia'],
+   steps:['Congelar el mango pelado y en trozos la noche anterior.','Procesar el mango congelado en la licuadora potente.','Agregar la leche de coco gradualmente.','Añadir vainilla y stevia si se desea.','Servir inmediatamente o recongelar 1 hora.']},
+  {id:20,profile:'all',time:'batidos',emoji:'🥭',name:'Batido Natural Antioxidante',desc:'Cargado de vitaminas y compuestos antiinflamatorios',tags:['antioxidante','natural'],tagColors:['green',''],time_label:'5 min',kcal:'150 kcal',
+   ingredients:['1 taza arándanos','½ mango','1 taza espinaca','1 cdita cúrcuma','½ cdita jengibre','1 taza leche de almendra'],
+   steps:['Lavar bien todas las frutas y verduras.','Colocar todos los ingredientes en la licuadora.','Licuar a alta velocidad 45 segundos.','Probar y ajustar sabor con más fruta si desea.','Servir inmediatamente para preservar nutrientes.']},
+  {id:21,profile:'all',time:'postre',emoji:'🍫',name:'Mousse de Chocolate Negro Saludable',desc:'Postre indulgente con cacao puro y sin azúcar',tags:['sin azúcar','antioxidante'],tagColors:['red','green'],time_label:'20 min',kcal:'160 kcal',
+   ingredients:['200g tofu sedoso','3 cdas cacao puro en polvo','3 cdas stevia líquida','1 cdita vainilla','Pizca de sal','Frutos rojos para decorar'],
+   steps:['Procesar el tofu sedoso en el procesador hasta suave.','Agregar el cacao, stevia y vainilla.','Procesar hasta obtener una crema homogénea.','Refrigerar 2 horas tapado.','Servir en copas con frutos rojos encima.']},
+];
+
+// ===== SHOPPING DATA =====
+const SHOPPING_LISTS = {
+  diabetes: {
+    'Frutas y Verduras 🥦': [
+      {name:'Manzanas verdes',qty:'6 unidades'},{name:'Espinaca',qty:'2 bolsas'},{name:'Brócoli',qty:'1 cabeza'},{name:'Pepino',qty:'3 unidades'},{name:'Limones',qty:'8 unidades'},{name:'Fresas',qty:'500g'}
+    ],
+    'Proteínas 🥩': [
+      {name:'Pechuga de pollo',qty:'1 kg'},{name:'Filete de tilapia',qty:'500g'},{name:'Salmón fresco',qty:'400g'},{name:'Atún en agua',qty:'4 latas'},{name:'Huevos',qty:'12 unidades'}
+    ],
+    'Granos y Cereales 🌾': [
+      {name:'Avena integral',qty:'500g'},{name:'Quinoa',qty:'400g'},{name:'Arroz integral',qty:'1 kg'},{name:'Pan integral',qty:'1 unidad'},{name:'Lentejas verdes',qty:'500g'}
+    ],
+    'Lácteos y Alternativas 🥛': [
+      {name:'Yogur griego sin azúcar',qty:'4 unidades'},{name:'Leche de almendra sin azúcar',qty:'1 litro'},{name:'Queso fresco bajo en grasa',qty:'200g'}
+    ],
+    'Extras y Condimentos 🫙': [
+      {name:'Aceite de oliva extra virgen',qty:'1 botella'},{name:'Stevia',qty:'1 paquete'},{name:'Semillas de chía',qty:'200g'},{name:'Canela molida',qty:'1 frasco'},{name:'Almendras sin sal',qty:'200g'}
+    ],
+  },
+  deportista: {
+    'Proteínas y Carnes 🥩': [
+      {name:'Pechuga de pollo',qty:'2 kg'},{name:'Salmón fresco',qty:'1 kg'},{name:'Atún en agua',qty:'6 latas'},{name:'Carne molida magra',qty:'500g'},{name:'Huevos',qty:'18 unidades'},{name:'Proteína whey',qty:'1 kg'}
+    ],
+    'Carbohidratos 🍚': [
+      {name:'Arroz integral',qty:'2 kg'},{name:'Avena',qty:'1 kg'},{name:'Pasta integral',qty:'500g'},{name:'Batata / Camote',qty:'1 kg'},{name:'Pan integral',qty:'2 unidades'}
+    ],
+    'Frutas 🍌': [
+      {name:'Bananos',qty:'12 unidades'},{name:'Manzanas',qty:'8 unidades'},{name:'Frutos del bosque',qty:'500g'},{name:'Mango',qty:'4 unidades'}
+    ],
+    'Frutos Secos y Extras 🥜': [
+      {name:'Nueces',qty:'300g'},{name:'Almendras',qty:'300g'},{name:'Aguacate',qty:'6 unidades'},{name:'Granola sin azúcar',qty:'500g'}
+    ],
+  },
+  vegetariano: {
+    'Vegetales y Verduras 🥦': [
+      {name:'Espinaca',qty:'3 bolsas'},{name:'Kale',qty:'1 bolsa'},{name:'Champiñones',qty:'500g'},{name:'Pimiento rojo y verde',qty:'4 unidades'},{name:'Tomates',qty:'1 kg'},{name:'Brócoli',qty:'2 cabezas'}
+    ],
+    'Proteínas Vegetales 🫘': [
+      {name:'Garbanzos',qty:'500g'},{name:'Lentejas',qty:'500g'},{name:'Tofu firme',qty:'400g'},{name:'Huevos',qty:'12 unidades'},{name:'Queso feta',qty:'200g'}
+    ],
+    'Lácteos 🧀': [
+      {name:'Yogur griego',qty:'4 unidades'},{name:'Queso parmesano',qty:'100g'},{name:'Mozzarella',qty:'200g'},{name:'Leche entera',qty:'1 litro'}
+    ],
+    'Granos 🌾': [
+      {name:'Pasta integral',qty:'500g'},{name:'Arroz basmati',qty:'1 kg'},{name:'Quinoa',qty:'400g'},{name:'Pan de centeno',qty:'1 unidad'}
+    ],
+  },
+  vegano: {
+    'Vegetales 🥬': [
+      {name:'Espinaca',qty:'2 bolsas'},{name:'Kale',qty:'2 bolsas'},{name:'Brócoli',qty:'2 cabezas'},{name:'Remolacha',qty:'4 unidades'},{name:'Aguacate',qty:'8 unidades'}
+    ],
+    'Proteínas Vegetales 🌱': [
+      {name:'Tofu firme',qty:'600g'},{name:'Tempeh',qty:'400g'},{name:'Garbanzos',qty:'500g'},{name:'Lentejas rojas',qty:'500g'},{name:'Edamame',qty:'300g'}
+    ],
+    'Leches Vegetales 🥛': [
+      {name:'Leche de coco',qty:'2 latas'},{name:'Leche de almendra',qty:'2 litros'},{name:'Leche de avena',qty:'1 litro'}
+    ],
+    'Semillas y Frutos Secos 🌰': [
+      {name:'Semillas de chía',qty:'200g'},{name:'Semillas de hemp',qty:'150g'},{name:'Tahini',qty:'1 frasco'},{name:'Crema de almendras',qty:'1 frasco'}
+    ],
+    'Granos Integrales 🌾': [
+      {name:'Quinoa',qty:'500g'},{name:'Arroz integral',qty:'1 kg'},{name:'Avena sin gluten',qty:'500g'},{name:'Pan de centeno vegano',qty:'1 unidad'}
+    ],
+  },
+  alergias: {
+    'Sin Gluten 🌾': [
+      {name:'Arroz blanco',qty:'2 kg'},{name:'Harina de arroz',qty:'500g'},{name:'Pan sin gluten',qty:'1 unidad'},{name:'Pasta de arroz',qty:'500g'}
+    ],
+    'Proteínas Seguras 🥩': [
+      {name:'Pechuga de pollo',qty:'1 kg'},{name:'Filete de res',qty:'500g'},{name:'Huevos',qty:'12 unidades'}
+    ],
+    'Frutas y Vegetales 🥕': [
+      {name:'Zanahorias',qty:'1 kg'},{name:'Calabacín',qty:'4 unidades'},{name:'Papas',qty:'1 kg'},{name:'Manzanas',qty:'6 unidades'},{name:'Bananos',qty:'8 unidades'}
+    ],
+    'Alternativas Lácteas 🥛': [
+      {name:'Leche de coco',qty:'2 latas'},{name:'Leche de arroz',qty:'1 litro'}
+    ],
+  },
+  gastritis: {
+    'Alimentos Suaves 🍚': [
+      {name:'Arroz blanco',qty:'1 kg'},{name:'Avena fina',qty:'500g'},{name:'Galletas de arroz',qty:'2 paquetes'},{name:'Pan blanco sin corteza',qty:'1 unidad'}
+    ],
+    'Proteínas Suaves 🍗': [
+      {name:'Pechuga de pollo sin piel',qty:'1 kg'},{name:'Merluza',qty:'500g'},{name:'Huevos',qty:'12 unidades'},{name:'Queso fresco bajo grasa',qty:'200g'}
+    ],
+    'Verduras Toleradas 🥕': [
+      {name:'Zanahorias',qty:'1 kg'},{name:'Calabacín',qty:'4 unidades'},{name:'Papa',qty:'1 kg'},{name:'Plátano maduro',qty:'6 unidades'}
+    ],
+    'Lácteos Tolerados 🥛': [
+      {name:'Leche descremada',qty:'2 litros'},{name:'Yogur natural sin ácido',qty:'4 unidades'}
+    ],
+  },
+  hipertension: {
+    'Frutas Ricas en Potasio 🍌': [
+      {name:'Plátanos',qty:'12 unidades'},{name:'Aguacate',qty:'6 unidades'},{name:'Mango',qty:'4 unidades'},{name:'Melón',qty:'1 unidad'}
+    ],
+    'Verduras 🥬': [
+      {name:'Espinaca',qty:'2 bolsas'},{name:'Remolacha',qty:'6 unidades'},{name:'Arúgula',qty:'1 bolsa'},{name:'Brócoli',qty:'2 cabezas'},{name:'Apio',qty:'1 manojo'}
+    ],
+    'Proteínas Bajas en Sodio 🐟': [
+      {name:'Salmón fresco sin sal',qty:'1 kg'},{name:'Pechuga de pollo',qty:'1 kg'},{name:'Atún en agua (bajo sodio)',qty:'4 latas'}
+    ],
+    'Sin Sal Extras 🫙': [
+      {name:'Aceite de oliva',qty:'1 botella'},{name:'Nueces sin sal',qty:'300g'},{name:'Semillas de lino',qty:'200g'},{name:'Vinagre balsámico',qty:'1 botella'}
+    ],
+  },
+  anemia: {
+    'Ricos en Hierro 🫘': [
+      {name:'Lentejas',qty:'1 kg'},{name:'Espinaca',qty:'3 bolsas'},{name:'Hígado de pollo',qty:'500g'},{name:'Carne de res magra',qty:'500g'},{name:'Semillas de calabaza',qty:'200g'}
+    ],
+    'Vitamina C (mejora absorción) 🍊': [
+      {name:'Naranjas',qty:'8 unidades'},{name:'Limones',qty:'8 unidades'},{name:'Fresas',qty:'500g'},{name:'Pimiento rojo',qty:'4 unidades'},{name:'Kiwi',qty:'6 unidades'}
+    ],
+    'Vitamina B12 🥚': [
+      {name:'Huevos',qty:'18 unidades'},{name:'Salmón',qty:'500g'},{name:'Sardinas en lata',qty:'4 latas'}
+    ],
+    'Otros Esenciales 🥦': [
+      {name:'Kale',qty:'2 bolsas'},{name:'Remolacha',qty:'6 unidades'},{name:'Quinoa',qty:'400g'},{name:'Garbanzos',qty:'500g'}
+    ],
+  },
+  leucemia: {
+    'Antioxidantes 🫐': [
+      {name:'Arándanos',qty:'500g'},{name:'Fresas',qty:'500g'},{name:'Frambuesas',qty:'300g'},{name:'Moras',qty:'300g'},{name:'Cerezas',qty:'300g'}
+    ],
+    'Antiinflamatorios 🌿': [
+      {name:'Cúrcuma fresca',qty:'200g'},{name:'Jengibre fresco',qty:'200g'},{name:'Ajo',qty:'2 cabezas'},{name:'Brócoli',qty:'3 cabezas'},{name:'Coliflor',qty:'2 cabezas'}
+    ],
+    'Proteínas de Alta Calidad 🍗': [
+      {name:'Pechuga de pollo orgánica',qty:'1 kg'},{name:'Salmón fresco',qty:'500g'},{name:'Huevos orgánicos',qty:'12 unidades'}
+    ],
+    'Hongos Medicinales 🍄': [
+      {name:'Hongos Shiitake',qty:'300g'},{name:'Hongos Reishi (extracto)',qty:'1 frasco'},{name:'Champiñones',qty:'500g'}
+    ],
+    'Extras Inmunes 🌰': [
+      {name:'Nueces',qty:'300g'},{name:'Semillas de girasol',qty:'200g'},{name:'Aceite de oliva extra virgen',qty:'1 botella'},{name:'Té verde',qty:'1 caja'}
+    ],
+  },
+};
+
+// ===== INIT MENU =====
+function initMenu() {
+  const tabs = document.getElementById('week-tabs');
+  tabs.innerHTML = '';
+  DAYS.forEach((d,i) => {
+    const t = document.createElement('div');
+    t.className = 'day-tab' + (i===0?' active':'');
+    t.textContent = d;
+    t.onclick = () => {
+      document.querySelectorAll('.day-tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      selectedDay = i;
+      renderMenuDay();
+    };
+    tabs.appendChild(t);
+  });
+  renderMenu();
+}
+
+function renderMenu() {
+  selectedDay = 0;
+  document.querySelectorAll('.day-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  renderMenuDay();
+}
+
+function renderMenuDay() {
+  const profile = document.getElementById('menu-profile').value;
+  const grid = document.getElementById('menu-grid');
+  const data = MENUS[profile];
+  if (!data) { grid.innerHTML = '<div class="empty-state"><div class="big-icon">🍽️</div><h4>Sin menú disponible</h4></div>'; return; }
+  const dayIndex = selectedDay % data.length;
+  const meals = data[dayIndex];
+  grid.innerHTML = meals.map(m => `
+    <div class="meal-card">
+      <div class="meal-time-badge ${m.badge}">${m.time}</div>
+      <div class="meal-info">
+        <h4>${m.name}</h4>
+        <p>${m.desc}</p>
+        <div class="meal-cals">🔥 ${m.cals}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== INIT RECIPES =====
+const CONDITION_FILTERS = [
+  {val:'diabetes',label:'🩺 Diabetes'},
+  {val:'vegetariano',label:'🥗 Vegetariano'},
+  {val:'alergias',label:'🌾 Alergias'},
+  {val:'all',label:'✨ Para todos'},
+];
+const TIME_FILTERS = [
+  {val:'all',label:'📋 Todos'},
+  {val:'desayuno',label:'☀️ Desayuno'},
+  {val:'almuerzo',label:'🌤 Almuerzo'},
+  {val:'cena',label:'🌙 Cena'},
+  {val:'snack',label:'🍎 Snack'},
+  {val:'postre',label:'🍮 Postres'},
+  {val:'bebidas',label:'🥤 Bebidas'},
+  {val:'batidos',label:'🥛 Batidos'},
+];
+
+function initRecipes() {
+  // filter tabs
+  const ft = document.getElementById('recipe-filter-tabs');
+  ft.innerHTML = CONDITION_FILTERS.map((f,i) => `
+    <div class="filter-tab ${i===0?'active':''}" onclick="setRecipeFilter('${f.val}',this)">${f.label}</div>
+  `).join('');
+  // time tabs
+  const tt = document.getElementById('recipe-time-tabs');
+  tt.innerHTML = TIME_FILTERS.map((f,i) => `
+    <div class="time-tab ${i===0?'active':''}" onclick="setTimeFilter('${f.val}',this)">${f.label}</div>
+  `).join('');
+  renderRecipes();
+}
+
+function setRecipeFilter(val, el) {
+  selectedRecipeFilter = val;
+  document.querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  renderRecipes();
+}
+
+function setTimeFilter(val, el) {
+  selectedTimeFilter = val;
+  document.querySelectorAll('.time-tab').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  renderRecipes();
+}
+
+function renderRecipes() {
+  let list = RECIPES.filter(r =>
+    (selectedRecipeFilter === 'all' ? true : r.profile === selectedRecipeFilter || r.profile === 'all') &&
+    (selectedTimeFilter === 'all' ? true : r.time === selectedTimeFilter)
+  );
+  const grid = document.getElementById('recipes-grid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="big-icon">📖</div><h4>Sin recetas para este filtro</h4><p>Prueba otra categoría</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(r => {
+    const tagsHtml = r.tags.map((t,i) => `<span class="recipe-tag ${r.tagColors[i]||''}">${t}</span>`).join('');
+    return `
+      <div class="recipe-card" onclick="openRecipe(${r.id})">
+        <div class="recipe-card-header">
+          <div class="recipe-emoji">${r.emoji}</div>
+          <div class="recipe-info">
+            <h4>${r.name}</h4>
+            <p>${r.desc}</p>
+            <div class="recipe-tags">${tagsHtml}</div>
+          </div>
+        </div>
+        <div class="recipe-footer">
+          <span>⏱ ${r.time_label}</span>
+          <span>🔥 ${r.kcal}</span>
+          <span>Ver receta →</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openRecipe(id) {
+  const r = RECIPES.find(x=>x.id===id);
+  if (!r) return;
+  const ing = r.ingredients.map(i=>`<div class="ingredient-item"><span>•</span>${i}</div>`).join('');
+  const steps = r.steps.map((s,i)=>`<div class="step-item"><div class="step-num">${i+1}</div><div class="step-text">${s}</div></div>`).join('');
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-recipe-emoji">${r.emoji}</div>
+    <div class="modal-recipe-title">${r.name}</div>
+    <div class="modal-recipe-desc">${r.desc}</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap">
+      ${r.tags.map((t,i)=>`<span class="recipe-tag ${r.tagColors[i]||''}">${t}</span>`).join('')}
+      <span class="recipe-tag yellow">⏱ ${r.time_label}</span>
+      <span class="recipe-tag red">🔥 ${r.kcal}</span>
+    </div>
+    <div class="modal-section">
+      <h5>🛒 Ingredientes</h5>
+      <div class="ingredient-list">${ing}</div>
+    </div>
+    <div class="modal-section">
+      <h5>👨‍🍳 Preparación</h5>
+      <div class="steps-list">${steps}</div>
+    </div>
+  `;
+  document.getElementById('recipe-modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('recipe-modal'))
+    document.getElementById('recipe-modal').classList.remove('open');
+}
+
+// ===== SHOPPING =====
+function initShopping() { renderShopping(); }
+
+function renderShopping() {
+  const profile = document.getElementById('shop-profile').value;
+  const data = SHOPPING_LISTS[profile];
+  if (!data) return;
+  const all_items = Object.values(data).flat();
+  const total = all_items.length;
+  const checked_count = all_items.filter((_,i)=>checkedItems[profile+'_'+i]).length;
+  const pct = total > 0 ? Math.round((checked_count/total)*100) : 0;
+  const r = 22, c = 2*Math.PI*r;
+  document.getElementById('shopping-summary-box').innerHTML = `
+    <div class="shopping-summary">
+      <div class="summary-text">
+        <h4>${checked_count}/${total} artículos</h4>
+        <p>${pct === 100 ? '¡Lista completa! 🎉' : 'Toca para marcar comprados'}</p>
+      </div>
+      <div class="summary-progress">
+        <svg width="52" height="52" class="progress-ring">
+          <circle class="progress-circle-bg" cx="26" cy="26" r="${r}"/>
+          <circle class="progress-circle" cx="26" cy="26" r="${r}"
+            stroke-dasharray="${c}" stroke-dashoffset="${c - (pct/100)*c}"/>
+        </svg>
+        <div class="progress-pct">${pct}%</div>
+      </div>
+    </div>
+  `;
+  let catIdx = 0;
+  document.getElementById('shopping-categories').innerHTML = Object.entries(data).map(([cat, items]) => {
+    const itemsHtml = items.map((item, localIdx) => {
+      const gIdx = catIdx++;
+      const key = profile+'_'+gIdx;
+      const isChecked = checkedItems[key] || false;
+      return `
+        <div class="shopping-item ${isChecked?'checked':''}" onclick="toggleItem('${key}')">
+          <div class="item-check">${isChecked?'✓':''}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-qty">${item.qty}</div>
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="category-block">
+        <div class="category-header"><div class="category-icon">${cat.match(/[\p{Emoji}]/u)?.[0]||'📦'}</div>${cat}</div>
+        ${itemsHtml}
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleItem(key) {
+  checkedItems[key] = !checkedItems[key];
+  renderShopping();
+}
+
+// ===== Init =====
+initMenu(); initRecipes(); initShopping();
+</script>
+</body>
+</html>

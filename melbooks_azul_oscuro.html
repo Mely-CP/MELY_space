@@ -1,0 +1,635 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-dark:#0A1628;
+  --bg-mid:#0F2040;
+  --bg-card:#142952;
+  --bg-card2:#1A3566;
+  --accent:#38BDF8;
+  --accent2:#0EA5E9;
+  --accent3:#7DD3FC;
+  --text-main:#E0F2FE;
+  --text-sec:#94C8E8;
+  --text-muted:#527EA0;
+  --border:#1E4170;
+  --border2:#2A5490;
+}
+body{font-family:var(--font-sans);font-size:14px;color:var(--text-main);background:var(--bg-dark)}
+.app{display:flex;min-height:680px;background:var(--bg-dark)}
+.sidebar{width:210px;flex-shrink:0;border-right:1px solid var(--border);padding:0;display:flex;flex-direction:column;background:var(--bg-mid)}
+.brand{padding:1.2rem 1rem 1rem;border-bottom:1px solid var(--border);margin-bottom:0.5rem}
+.brand-name{font-size:17px;font-weight:500;color:var(--text-main);letter-spacing:0.01em}
+.brand-dot{color:var(--accent)}
+.brand-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 1rem;cursor:pointer;color:var(--text-sec);font-size:13px;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;border-left:2px solid transparent}
+.nav-item:hover{background:rgba(56,189,248,0.07);color:var(--text-main)}
+.nav-item.active{background:rgba(56,189,248,0.12);color:var(--accent);border-left:2px solid var(--accent);font-weight:500}
+.nav-icon{width:15px;height:15px;flex-shrink:0;stroke:currentColor}
+.main{flex:1;overflow:auto;background:var(--bg-dark)}
+.topbar{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-mid)}
+.topbar-title{font-size:16px;font-weight:500;color:var(--text-main)}
+.content{padding:1.5rem}
+.hidden{display:none!important}
+.btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:12px;color:var(--text-sec);font-family:var(--font-sans);transition:all 0.15s}
+.btn:hover{background:rgba(56,189,248,0.1);color:var(--accent);border-color:var(--accent)}
+.btn-primary{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.btn-primary:hover{background:#0284C7;border-color:#0284C7;color:#fff}
+.btn-sm{padding:4px 9px;font-size:11px}
+.btn-danger{border-color:#3B1E1E;color:#F87171}
+.btn-danger:hover{background:rgba(248,113,113,0.1)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;flex-direction:column;gap:4px}
+.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em}
+.stat-value{font-size:24px;font-weight:500;color:var(--text-main)}
+.stat-trend{font-size:11px;color:var(--accent3)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-header{padding:0.75rem 1rem;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;color:var(--text-main);display:flex;justify-content:space-between;align-items:center;background:var(--bg-card2)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 12px;font-size:10px;font-weight:500;color:var(--text-muted);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.05em;background:var(--bg-card2)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-sec)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(56,189,248,0.04);color:var(--text-main)}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:500}
+.badge-success{background:rgba(52,211,153,0.15);color:#6EE7B7;border:1px solid rgba(52,211,153,0.2)}
+.badge-warning{background:rgba(251,191,36,0.12);color:#FCD34D;border:1px solid rgba(251,191,36,0.2)}
+.badge-info{background:rgba(56,189,248,0.12);color:var(--accent3);border:1px solid rgba(56,189,248,0.2)}
+.badge-danger{background:rgba(248,113,113,0.12);color:#FCA5A5;border:1px solid rgba(248,113,113,0.2)}
+.badge-purple{background:rgba(167,139,250,0.12);color:#C4B5FD;border:1px solid rgba(167,139,250,0.2)}
+.badge-cat{background:rgba(56,189,248,0.1);color:var(--accent3);border:1px solid var(--border)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:0.75rem}
+label{font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
+input,select,textarea{padding:8px 10px;border:1px solid var(--border2);border-radius:7px;font-size:12px;background:var(--bg-dark);color:var(--text-main);font-family:var(--font-sans);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(56,189,248,0.15)}
+select option{background:var(--bg-dark);color:var(--text-main)}
+input::placeholder{color:var(--text-muted)}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,10,30,0.7);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:var(--bg-mid);border:1px solid var(--border2);border-radius:12px;width:490px;max-height:82vh;overflow-y:auto}
+.modal-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-weight:500;color:var(--text-main);background:var(--bg-card2)}
+.modal-body{padding:1.25rem}
+.modal-footer{padding:0.75rem 1.25rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;background:var(--bg-card2)}
+.search-bar{display:flex;align-items:center;gap:8px;padding:0.75rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-mid)}
+.search-bar input{max-width:300px;background:var(--bg-dark)}
+.book-cover{width:32px;height:44px;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;background:rgba(56,189,248,0.15);color:var(--accent);border:1px solid rgba(56,189,248,0.25)}
+.progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px}
+.tab-bar{display:flex;gap:4px;padding:0.75rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-mid)}
+.tab{padding:5px 12px;border-radius:7px;cursor:pointer;font-size:12px;color:var(--text-muted);border:none;background:none;font-family:var(--font-sans);transition:all 0.15s}
+.tab.active{background:rgba(56,189,248,0.12);color:var(--accent);font-weight:500}
+.tab:hover{color:var(--text-main)}
+.section{display:none}
+.section.active{display:block}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;background:transparent;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);transition:all 0.15s}
+.chip.active{background:rgba(56,189,248,0.12);color:var(--accent);border-color:rgba(56,189,248,0.3)}
+.chip:hover{border-color:var(--border2);color:var(--text-sec)}
+.top-section{display:flex;gap:1rem;margin-bottom:1.5rem}
+.rating{color:#FCD34D;font-size:12px}
+.divider{border:none;border-top:1px solid var(--border);margin:0.75rem 0}
+.glow-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);flex-shrink:0}
+</style>
+
+<h2 class="sr-only">MelBooks — Sistema de gestión de librería online</h2>
+
+<div class="app" id="app" style="position:relative;min-height:680px">
+
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-name">📚 Mel<span class="brand-dot">Books</span></div>
+    <div class="brand-sub">Sistema de gestión</div>
+  </div>
+  <div style="padding:0.5rem 0.75rem;margin-bottom:0.25rem">
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;padding:0 0.25rem">Menú</div>
+  </div>
+  <button class="nav-item active" onclick="nav('dashboard',this)">
+    <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+    Dashboard
+  </button>
+  <button class="nav-item" onclick="nav('catalogo',this)">
+    <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><rect x="2" y="1" width="10" height="14" rx="1.5"/><path d="M5 5h4M5 8h4M5 11h2"/></svg>
+    Catálogo
+  </button>
+  <button class="nav-item" onclick="nav('inventario',this)">
+    <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M1 4l7-3 7 3v8l-7 3-7-3V4z"/><path d="M8 1v14M1 4l7 3 7-3"/></svg>
+    Inventario
+  </button>
+  <button class="nav-item" onclick="nav('pedidos',this)">
+    <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M1 2h3l2 9h7l2-6H6"/><circle cx="7" cy="13" r="1"/><circle cx="12" cy="13" r="1"/></svg>
+    Pedidos
+  </button>
+  <button class="nav-item" onclick="nav('clientes',this)">
+    <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+    Clientes
+  </button>
+  <button class="nav-item" onclick="nav('reportes',this)">
+    <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M2 14V6l4-4h8v12H2z"/><path d="M6 2v4H2"/><path d="M5 9h6M5 11h4"/></svg>
+    Reportes
+  </button>
+  <div style="margin-top:auto;padding:1rem;border-top:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="glow-dot"></div>
+      <span style="font-size:11px;color:var(--text-muted)">Sistema activo</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="s-dashboard" class="section active">
+  <div class="topbar">
+    <div class="topbar-title">Dashboard</div>
+    <span style="font-size:11px;color:var(--text-muted)">Lunes, 20 abril 2026</span>
+  </div>
+  <div class="content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Libros en catálogo</div>
+        <div class="stat-value" id="stat-libros">0</div>
+        <div class="stat-trend">+3 este mes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pedidos activos</div>
+        <div class="stat-value" id="stat-pedidos">0</div>
+        <div class="stat-trend" style="color:#FCD34D">4 pendientes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Clientes</div>
+        <div class="stat-value" id="stat-clientes">0</div>
+        <div class="stat-trend">+2 esta semana</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Ingresos del mes</div>
+        <div class="stat-value" id="stat-ingresos">$0</div>
+        <div class="stat-trend">vs mes anterior</div>
+      </div>
+    </div>
+    <div class="top-section">
+      <div class="card" style="flex:1">
+        <div class="card-header">Pedidos recientes</div>
+        <table><thead><tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Estado</th></tr></thead>
+        <tbody id="dash-pedidos"></tbody></table>
+      </div>
+      <div class="card" style="width:210px;flex-shrink:0">
+        <div class="card-header">Stock bajo</div>
+        <div id="dash-stock" style="padding:0.6rem 0.75rem"></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">Categorías populares</div>
+        <div style="padding:1rem" id="dash-cats"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">Más vendidos</div>
+        <table><thead><tr><th>#</th><th>Libro</th><th>Ventas</th></tr></thead>
+        <tbody id="dash-top"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATÁLOGO -->
+<div id="s-catalogo" class="section">
+  <div class="topbar">
+    <div class="topbar-title">Catálogo de libros</div>
+    <button class="btn btn-primary" onclick="openModal('modal-libro')">+ Agregar libro</button>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="search-libro" placeholder="Buscar título, autor o ISBN..." oninput="renderCatalogo()" style="max-width:280px">
+    <div style="display:flex;gap:5px;flex-wrap:wrap" id="filter-chips">
+      <span class="chip active" onclick="setFilter('Todos',this)">Todos</span>
+      <span class="chip" onclick="setFilter('Ficción',this)">Ficción</span>
+      <span class="chip" onclick="setFilter('No Ficción',this)">No Ficción</span>
+      <span class="chip" onclick="setFilter('Ciencia',this)">Ciencia</span>
+      <span class="chip" onclick="setFilter('Historia',this)">Historia</span>
+      <span class="chip" onclick="setFilter('Infantil',this)">Infantil</span>
+      <span class="chip" onclick="setFilter('Autoayuda',this)">Autoayuda</span>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>Libro</th><th>Autor</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Calif.</th><th>Acciones</th></tr></thead>
+    <tbody id="tabla-catalogo"></tbody>
+  </table>
+</div>
+
+<!-- INVENTARIO -->
+<div id="s-inventario" class="section">
+  <div class="topbar">
+    <div class="topbar-title">Inventario</div>
+    <button class="btn" onclick="sendPrompt('¿Qué libros de MelBooks necesitan reposición urgente?')">Análisis IA ↗</button>
+  </div>
+  <div class="content">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="stat-label">Unidades totales</div><div class="stat-value" id="inv-total">0</div></div>
+      <div class="stat-card"><div class="stat-label">Stock bajo (&lt;10)</div><div class="stat-value" id="inv-bajo" style="color:#FCD34D">0</div></div>
+      <div class="stat-card"><div class="stat-label">Sin stock</div><div class="stat-value" id="inv-cero" style="color:#F87171">0</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Estado del inventario</div>
+      <table>
+        <thead><tr><th>Libro</th><th>ISBN</th><th>Categoría</th><th>Stock</th><th>Estado</th><th>Ajustar</th></tr></thead>
+        <tbody id="tabla-inventario"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PEDIDOS -->
+<div id="s-pedidos" class="section">
+  <div class="topbar">
+    <div class="topbar-title">Pedidos</div>
+    <button class="btn btn-primary" onclick="openModal('modal-pedido')">+ Nuevo pedido</button>
+  </div>
+  <div class="tab-bar">
+    <button class="tab active" onclick="setPedidoTab('Todos',this)">Todos</button>
+    <button class="tab" onclick="setPedidoTab('Pendiente',this)">Pendientes</button>
+    <button class="tab" onclick="setPedidoTab('Procesando',this)">Procesando</button>
+    <button class="tab" onclick="setPedidoTab('Enviado',this)">Enviados</button>
+    <button class="tab" onclick="setPedidoTab('Entregado',this)">Entregados</button>
+  </div>
+  <table>
+    <thead><tr><th>N° Pedido</th><th>Cliente</th><th>Libro</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Acción</th></tr></thead>
+    <tbody id="tabla-pedidos"></tbody>
+  </table>
+</div>
+
+<!-- CLIENTES -->
+<div id="s-clientes" class="section">
+  <div class="topbar">
+    <div class="topbar-title">Clientes</div>
+    <button class="btn btn-primary" onclick="openModal('modal-cliente')">+ Nuevo cliente</button>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="search-cliente" placeholder="Buscar cliente..." oninput="renderClientes()" style="max-width:280px">
+  </div>
+  <table>
+    <thead><tr><th>Cliente</th><th>Email</th><th>Ciudad</th><th>Pedidos</th><th>Total gastado</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody id="tabla-clientes"></tbody>
+  </table>
+</div>
+
+<!-- REPORTES -->
+<div id="s-reportes" class="section">
+  <div class="topbar"><div class="topbar-title">Reportes</div></div>
+  <div class="content">
+    <div class="grid-2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-header">Ventas por categoría</div>
+        <div style="padding:1rem" id="rep-cats"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">Resumen financiero</div>
+        <div style="padding:1rem" id="rep-fin"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Actividad mensual
+        <button class="btn btn-sm btn-primary" onclick="sendPrompt('Genera un reporte completo de ventas de MelBooks con tendencias y recomendaciones')">Reporte IA ↗</button>
+      </div>
+      <div id="rep-actividad" style="padding:1.25rem"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- MODAL LIBRO -->
+<div class="modal-overlay hidden" id="modal-libro">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-libro-title">Agregar libro</span>
+      <button class="btn btn-sm" onclick="closeModal('modal-libro')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="libro-id">
+      <div class="grid-2">
+        <div class="form-group"><label>Título *</label><input id="libro-titulo" placeholder="Título del libro"></div>
+        <div class="form-group"><label>Autor *</label><input id="libro-autor" placeholder="Autor"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>ISBN</label><input id="libro-isbn" placeholder="978-..."></div>
+        <div class="form-group"><label>Categoría</label>
+          <select id="libro-cat"><option>Ficción</option><option>No Ficción</option><option>Ciencia</option><option>Historia</option><option>Infantil</option><option>Autoayuda</option></select>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group"><label>Precio ($)</label><input id="libro-precio" type="number" min="0" step="0.01" placeholder="0.00"></div>
+        <div class="form-group"><label>Stock</label><input id="libro-stock" type="number" min="0" placeholder="0"></div>
+        <div class="form-group"><label>Calificación</label><input id="libro-rating" type="number" min="1" max="5" step="0.1" placeholder="4.5"></div>
+      </div>
+      <div class="form-group"><label>Editorial</label><input id="libro-editorial" placeholder="Editorial"></div>
+      <div class="form-group"><label>Descripción</label><textarea id="libro-desc" rows="2" placeholder="Descripción breve..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-libro')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarLibro()">Guardar libro</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PEDIDO -->
+<div class="modal-overlay hidden" id="modal-pedido">
+  <div class="modal">
+    <div class="modal-header"><span>Nuevo pedido</span><button class="btn btn-sm" onclick="closeModal('modal-pedido')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Cliente *</label><select id="ped-cliente"></select></div>
+      <div class="form-group"><label>Libro *</label><select id="ped-libro" onchange="updatePedTotal()"></select></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Cantidad</label><input id="ped-cant" type="number" min="1" value="1" oninput="updatePedTotal()"></div>
+        <div class="form-group"><label>Total estimado</label><input id="ped-total" readonly></div>
+      </div>
+      <div class="form-group"><label>Dirección de envío</label><input id="ped-dir" placeholder="Calle, ciudad, país"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-pedido')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarPedido()">Crear pedido</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE -->
+<div class="modal-overlay hidden" id="modal-cliente">
+  <div class="modal">
+    <div class="modal-header"><span id="modal-cliente-title">Nuevo cliente</span><button class="btn btn-sm" onclick="closeModal('modal-cliente')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="cli-id">
+      <div class="grid-2">
+        <div class="form-group"><label>Nombre *</label><input id="cli-nombre" placeholder="Nombre completo"></div>
+        <div class="form-group"><label>Email *</label><input id="cli-email" placeholder="correo@ejemplo.com"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>Teléfono</label><input id="cli-tel" placeholder="+506..."></div>
+        <div class="form-group"><label>Ciudad</label><input id="cli-ciudad" placeholder="Ciudad"></div>
+      </div>
+      <div class="form-group"><label>Estado</label>
+        <select id="cli-estado"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-cliente')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarCliente()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+let libros=[
+  {id:1,titulo:"Cien años de soledad",autor:"García Márquez",isbn:"978-84-376-0494-7",cat:"Ficción",precio:18.99,stock:24,rating:4.8,editorial:"Sudamericana",ventas:47},
+  {id:2,titulo:"El principito",autor:"Saint-Exupéry",isbn:"978-84-261-0545-2",cat:"Infantil",precio:12.50,stock:5,rating:4.9,editorial:"Salamandra",ventas:62},
+  {id:3,titulo:"Sapiens",autor:"Yuval Noah Harari",isbn:"978-84-9992-395-7",cat:"Historia",precio:22.00,stock:18,rating:4.7,editorial:"Debate",ventas:38},
+  {id:4,titulo:"El alquimista",autor:"Paulo Coelho",isbn:"978-84-08-17293-7",cat:"Autoayuda",precio:14.99,stock:0,rating:4.5,editorial:"Planeta",ventas:55},
+  {id:5,titulo:"Cosmos",autor:"Carl Sagan",isbn:"978-84-672-3725-4",cat:"Ciencia",precio:26.50,stock:9,rating:4.9,editorial:"Planeta",ventas:29},
+  {id:6,titulo:"Atomic Habits",autor:"James Clear",isbn:"978-84-18187-62-8",cat:"Autoayuda",precio:19.99,stock:31,rating:4.7,editorial:"Paidós",ventas:44},
+  {id:7,titulo:"1984",autor:"George Orwell",isbn:"978-84-450-7521-0",cat:"Ficción",precio:15.50,stock:12,rating:4.6,editorial:"Destino",ventas:33},
+  {id:8,titulo:"Breves respuestas",autor:"Stephen Hawking",isbn:"978-84-9992-873-0",cat:"Ciencia",precio:17.99,stock:7,rating:4.4,editorial:"Crítica",ventas:21}
+];
+let clientes=[
+  {id:1,nombre:"Ana Martínez",email:"ana@email.com",tel:"+506 8888-1234",ciudad:"San José",estado:"Activo",pedidos:5,gastado:132.45},
+  {id:2,nombre:"Carlos Rodríguez",email:"carlos@email.com",tel:"+506 7777-5678",ciudad:"Cartago",estado:"Activo",pedidos:3,gastado:67.98},
+  {id:3,nombre:"María López",email:"maria@email.com",tel:"+506 6666-9012",ciudad:"Heredia",estado:"Activo",pedidos:8,gastado:214.30},
+  {id:4,nombre:"Jorge Vargas",email:"jorge@email.com",tel:"+506 5555-3456",ciudad:"Alajuela",estado:"Inactivo",pedidos:1,gastado:18.99},
+  {id:5,nombre:"Sofía Jiménez",email:"sofia@email.com",tel:"+506 4444-7890",ciudad:"Liberia",estado:"Activo",pedidos:6,gastado:178.50}
+];
+let pedidos=[
+  {id:"PED-001",clienteId:1,libroId:1,cant:2,total:37.98,fecha:"2026-04-18",estado:"Entregado",dir:"Av. Central, San José"},
+  {id:"PED-002",clienteId:3,libroId:3,cant:1,total:22.00,fecha:"2026-04-19",estado:"Enviado",dir:"Calle 5, Heredia"},
+  {id:"PED-003",clienteId:2,libroId:7,cant:1,total:15.50,fecha:"2026-04-19",estado:"Procesando",dir:"Barrio El Carmen, Cartago"},
+  {id:"PED-004",clienteId:5,libroId:6,cant:2,total:39.98,fecha:"2026-04-20",estado:"Pendiente",dir:"Av. Principal, Liberia"},
+  {id:"PED-005",clienteId:1,libroId:5,cant:1,total:26.50,fecha:"2026-04-20",estado:"Pendiente",dir:"Av. Central, San José"},
+  {id:"PED-006",clienteId:4,libroId:2,cant:1,total:12.50,fecha:"2026-04-15",estado:"Entregado",dir:"Barrio Corazón, Alajuela"}
+];
+let nextLibroId=9,nextPedId=7,nextCliId=6,filterCat="Todos",filterPedTab="Todos";
+
+const coverBg=["rgba(56,189,248,0.18)","rgba(52,211,153,0.15)","rgba(167,139,250,0.15)","rgba(251,191,36,0.15)","rgba(248,113,113,0.15)","rgba(56,189,248,0.12)","rgba(52,211,153,0.18)"];
+const coverFg=["#7DD3FC","#6EE7B7","#C4B5FD","#FCD34D","#FCA5A5","#38BDF8","#34D399"];
+function coverStyle(i){const c=i%7;return`background:${coverBg[c]};color:${coverFg[c]};border:1px solid ${coverFg[c]}33`;}
+
+function nav(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  el.classList.add('active');
+  const fn={dashboard:renderDashboard,catalogo:renderCatalogo,inventario:renderInventario,pedidos:renderPedidos,clientes:renderClientes,reportes:renderReportes};
+  if(fn[id])fn[id]();
+}
+function openModal(id){if(id==='modal-pedido')populatePedidoModal();document.getElementById(id).classList.remove('hidden');}
+function closeModal(id){document.getElementById(id).classList.add('hidden');if(id==='modal-libro')resetLibroModal();if(id==='modal-cliente')resetCliModal();}
+function setFilter(cat,el){filterCat=cat;document.querySelectorAll('#filter-chips .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderCatalogo();}
+function setPedidoTab(tab,el){filterPedTab=tab;document.querySelectorAll('.tab-bar .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderPedidos();}
+
+function estadoBadge(e){const m={Pendiente:'badge-warning',Procesando:'badge-info',Enviado:'badge-purple',Entregado:'badge-success',Cancelado:'badge-danger'};return`<span class="badge ${m[e]||'badge-info'}">${e}</span>`;}
+function stockBadge(s){if(s===0)return`<span class="badge badge-danger">Sin stock</span>`;if(s<10)return`<span class="badge badge-warning">Stock bajo</span>`;return`<span class="badge badge-success">Disponible</span>`;}
+
+function renderDashboard(){
+  const ingresos=pedidos.filter(p=>p.estado==='Entregado').reduce((a,p)=>a+p.total,0);
+  document.getElementById('stat-libros').textContent=libros.length;
+  document.getElementById('stat-pedidos').textContent=pedidos.length;
+  document.getElementById('stat-clientes').textContent=clientes.length;
+  document.getElementById('stat-ingresos').textContent='$'+ingresos.toFixed(2);
+  document.getElementById('dash-pedidos').innerHTML=pedidos.slice(0,4).map(p=>{
+    const cl=clientes.find(c=>c.id===p.clienteId);
+    return`<tr><td style="font-weight:500;color:var(--accent3)">${p.id}</td><td>${cl?cl.nombre:'—'}</td><td style="color:var(--text-main);font-weight:500">$${p.total.toFixed(2)}</td><td>${estadoBadge(p.estado)}</td></tr>`;
+  }).join('');
+  const bajos=libros.filter(l=>l.stock<10);
+  document.getElementById('dash-stock').innerHTML=bajos.map(l=>`
+    <div style="padding:6px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:500;color:var(--text-main);margin-bottom:3px">${l.titulo}</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${Math.min(100,l.stock*10)}%;background:${l.stock===0?'#F87171':l.stock<5?'#FCD34D':'#38BDF8'}"></div></div>
+        <span style="font-size:10px;color:var(--text-muted)">${l.stock}</span>
+      </div>
+    </div>`).join('')||'<div style="color:var(--text-muted);font-size:11px;padding:6px 0">Todo en orden ✓</div>';
+  const cats={};libros.forEach(l=>{cats[l.cat]=(cats[l.cat]||0)+1;});
+  const total=libros.length;
+  const barC=['#38BDF8','#34D399','#A78BFA','#FCD34D','#F87171','#FB923C'];
+  document.getElementById('dash-cats').innerHTML=Object.entries(cats).map(([k,v],i)=>`
+    <div style="margin-bottom:9px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;color:var(--text-sec)"><span>${k}</span><span>${v}</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(v/total*100)}%;background:${barC[i%barC.length]}"></div></div>
+    </div>`).join('');
+  const sorted=[...libros].sort((a,b)=>b.ventas-a.ventas);
+  document.getElementById('dash-top').innerHTML=sorted.slice(0,5).map((l,i)=>`
+    <tr><td style="color:var(--text-muted)">${i+1}</td><td style="font-size:11px">${l.titulo}</td><td style="font-weight:500;color:var(--accent)">${l.ventas}</td></tr>`).join('');
+}
+
+function renderCatalogo(){
+  const q=(document.getElementById('search-libro').value||'').toLowerCase();
+  let data=libros;
+  if(filterCat!=='Todos')data=data.filter(l=>l.cat===filterCat);
+  if(q)data=data.filter(l=>l.titulo.toLowerCase().includes(q)||l.autor.toLowerCase().includes(q)||(l.isbn||'').includes(q));
+  const tb=document.getElementById('tabla-catalogo');
+  if(!data.length){tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted)">No se encontraron libros</td></tr>`;return;}
+  tb.innerHTML=data.map((l,i)=>`<tr>
+    <td><div style="display:flex;align-items:center;gap:10px">
+      <div class="book-cover" style="${coverStyle(i)}">${l.titulo[0]}</div>
+      <div><div style="font-weight:500;font-size:12px;color:var(--text-main)">${l.titulo}</div><div style="font-size:10px;color:var(--text-muted)">${l.editorial||''}</div></div>
+    </div></td>
+    <td>${l.autor}</td>
+    <td><span class="badge badge-cat">${l.cat}</span></td>
+    <td style="font-weight:500;color:var(--text-main)">$${l.precio.toFixed(2)}</td>
+    <td style="color:${l.stock===0?'#F87171':l.stock<10?'#FCD34D':'var(--text-sec)'}">${l.stock}</td>
+    <td><span class="rating">★</span> <span style="color:var(--text-sec)">${l.rating}</span></td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn-sm" onclick="editLibro(${l.id})">Editar</button>
+      <button class="btn btn-sm btn-danger" onclick="eliminarLibro(${l.id})">✕</button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function renderInventario(){
+  const total=libros.reduce((a,l)=>a+l.stock,0);
+  document.getElementById('inv-total').textContent=total;
+  document.getElementById('inv-bajo').textContent=libros.filter(l=>l.stock>0&&l.stock<10).length;
+  document.getElementById('inv-cero').textContent=libros.filter(l=>l.stock===0).length;
+  document.getElementById('tabla-inventario').innerHTML=libros.map(l=>`<tr>
+    <td style="font-weight:500;color:var(--text-main)">${l.titulo}</td>
+    <td style="font-size:11px;color:var(--text-muted)">${l.isbn||'—'}</td>
+    <td>${l.cat}</td>
+    <td><div style="display:flex;align-items:center;gap:8px">
+      <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${Math.min(100,l.stock*3)}%;background:${l.stock===0?'#F87171':l.stock<10?'#FCD34D':'#38BDF8'}"></div></div>
+      <span style="font-size:12px;font-weight:500;color:var(--text-main)">${l.stock}</span>
+    </div></td>
+    <td>${stockBadge(l.stock)}</td>
+    <td><div style="display:flex;align-items:center;gap:4px">
+      <button class="btn btn-sm" onclick="ajustarStock(${l.id},-1)">−</button>
+      <button class="btn btn-sm" onclick="ajustarStock(${l.id},1)">+</button>
+      <button class="btn btn-sm btn-primary" onclick="reponerStock(${l.id})">Reponer</button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function renderPedidos(){
+  let data=filterPedTab==='Todos'?pedidos:pedidos.filter(p=>p.estado===filterPedTab);
+  document.getElementById('tabla-pedidos').innerHTML=data.map(p=>{
+    const cl=clientes.find(c=>c.id===p.clienteId);
+    const li=libros.find(l=>l.id===p.libroId);
+    return`<tr>
+      <td style="font-weight:500;color:var(--accent3)">${p.id}</td>
+      <td style="color:var(--text-main)">${cl?cl.nombre:'—'}</td>
+      <td style="font-size:11px">${li?li.titulo:'—'} ×${p.cant}</td>
+      <td style="font-weight:500;color:var(--text-main)">$${p.total.toFixed(2)}</td>
+      <td style="color:var(--text-muted)">${p.fecha}</td>
+      <td>${estadoBadge(p.estado)}</td>
+      <td><select style="font-size:11px;padding:3px 6px;width:115px" onchange="cambiarEstado('${p.id}',this.value)">
+        ${['Pendiente','Procesando','Enviado','Entregado','Cancelado'].map(e=>`<option ${p.estado===e?'selected':''}>${e}</option>`).join('')}
+      </select></td>
+    </tr>`;
+  }).join('')||`<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted)">No hay pedidos</td></tr>`;
+}
+
+function renderClientes(){
+  const q=(document.getElementById('search-cliente').value||'').toLowerCase();
+  let data=q?clientes.filter(c=>c.nombre.toLowerCase().includes(q)||c.email.toLowerCase().includes(q)):clientes;
+  document.getElementById('tabla-clientes').innerHTML=data.map(c=>{
+    const ini=c.nombre.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+    return`<tr>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar">${ini}</div><div style="font-weight:500;color:var(--text-main)">${c.nombre}</div></div></td>
+      <td style="font-size:11px">${c.email}</td>
+      <td>${c.ciudad}</td>
+      <td style="text-align:center;color:var(--text-main)">${c.pedidos}</td>
+      <td style="font-weight:500;color:var(--text-main)">$${c.gastado.toFixed(2)}</td>
+      <td><span class="badge ${c.estado==='Activo'?'badge-success':'badge-danger'}">${c.estado}</span></td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editCliente(${c.id})">Editar</button>
+        <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${c.id})">✕</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderReportes(){
+  const cats={};libros.forEach(l=>{cats[l.cat]=(cats[l.cat]||0)+l.ventas;});
+  const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const max=sorted[0]?sorted[0][1]:1;
+  const barC=['#38BDF8','#34D399','#A78BFA','#FCD34D','#F87171','#FB923C'];
+  document.getElementById('rep-cats').innerHTML=sorted.map(([k,v],i)=>`
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;color:var(--text-sec)"><span>${k}</span><span style="font-weight:500;color:var(--text-main)">${v} ventas</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(v/max*100)}%;background:${barC[i%barC.length]}"></div></div>
+    </div>`).join('');
+  const total=pedidos.reduce((a,p)=>a+p.total,0);
+  const cobrado=pedidos.filter(p=>p.estado==='Entregado').reduce((a,p)=>a+p.total,0);
+  const proceso=pedidos.filter(p=>p.estado!=='Entregado'&&p.estado!=='Cancelado').reduce((a,p)=>a+p.total,0);
+  document.getElementById('rep-fin').innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Ingresos cobrados</span><strong style="color:#34D399">$${cobrado.toFixed(2)}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">En proceso</span><strong style="color:#FCD34D">$${proceso.toFixed(2)}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Libro más caro</span><strong style="color:var(--text-main)">$${Math.max(...libros.map(l=>l.precio)).toFixed(2)}</strong></div>
+      <div style="border-top:1px solid var(--border);padding-top:8px;display:flex;justify-content:space-between"><span style="color:var(--text-main);font-weight:500">Total acumulado</span><strong style="font-size:16px;color:var(--accent)">$${total.toFixed(2)}</strong></div>
+    </div>`;
+  const meses=['Enero','Febrero','Marzo','Abril'];
+  const vals=[1240,1890,1420,Math.round(cobrado)];
+  const maxV=Math.max(...vals);
+  document.getElementById('rep-actividad').innerHTML=`
+    <div style="display:flex;align-items:flex-end;gap:16px;height:130px">
+      ${meses.map((m,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="font-size:11px;color:var(--text-muted)">$${vals[i]}</div>
+        <div style="width:100%;border-radius:4px 4px 0 0;height:${Math.round(vals[i]/maxV*100)}px;background:${i===3?'#34D399':'#0EA5E9'};opacity:${i===3?1:0.7+i*0.1}"></div>
+        <div style="font-size:10px;color:var(--text-muted)">${m}</div>
+      </div>`).join('')}
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">* Abril 2026 parcial (en verde)</div>`;
+}
+
+function guardarLibro(){
+  const id=document.getElementById('libro-id').value;
+  const obj={titulo:document.getElementById('libro-titulo').value.trim(),autor:document.getElementById('libro-autor').value.trim(),isbn:document.getElementById('libro-isbn').value.trim(),cat:document.getElementById('libro-cat').value,precio:parseFloat(document.getElementById('libro-precio').value)||0,stock:parseInt(document.getElementById('libro-stock').value)||0,rating:parseFloat(document.getElementById('libro-rating').value)||4.0,editorial:document.getElementById('libro-editorial').value.trim(),desc:document.getElementById('libro-desc').value.trim(),ventas:0};
+  if(!obj.titulo||!obj.autor){alert('Título y autor son requeridos');return;}
+  if(id){const idx=libros.findIndex(l=>l.id===parseInt(id));if(idx>=0)libros[idx]={...libros[idx],...obj};}
+  else{obj.id=nextLibroId++;libros.push(obj);}
+  closeModal('modal-libro');renderCatalogo();
+}
+function editLibro(id){
+  const l=libros.find(x=>x.id===id);if(!l)return;
+  ['id','titulo','autor','isbn','precio','stock','rating','editorial','desc'].forEach(f=>document.getElementById('libro-'+f).value=l[f]||'');
+  document.getElementById('libro-cat').value=l.cat;
+  document.getElementById('modal-libro-title').textContent='Editar libro';
+  openModal('modal-libro');
+}
+function eliminarLibro(id){if(!confirm('¿Eliminar este libro?'))return;libros=libros.filter(l=>l.id!==id);renderCatalogo();}
+function resetLibroModal(){['id','titulo','autor','isbn','precio','stock','rating','editorial','desc'].forEach(f=>document.getElementById('libro-'+f).value='');document.getElementById('modal-libro-title').textContent='Agregar libro';}
+function populatePedidoModal(){
+  document.getElementById('ped-cliente').innerHTML=clientes.map(c=>`<option value="${c.id}">${c.nombre}</option>`).join('');
+  document.getElementById('ped-libro').innerHTML=libros.filter(l=>l.stock>0).map(l=>`<option value="${l.id}" data-precio="${l.precio}">${l.titulo} — $${l.precio.toFixed(2)}</option>`).join('');
+  updatePedTotal();
+}
+function updatePedTotal(){const sel=document.getElementById('ped-libro');if(!sel.options.length)return;const p=parseFloat(sel.options[sel.selectedIndex]?.dataset?.precio||0);const c=parseInt(document.getElementById('ped-cant').value)||1;document.getElementById('ped-total').value='$'+(p*c).toFixed(2);}
+function guardarPedido(){
+  const cId=parseInt(document.getElementById('ped-cliente').value);
+  const lId=parseInt(document.getElementById('ped-libro').value);
+  const cant=parseInt(document.getElementById('ped-cant').value)||1;
+  const dir=document.getElementById('ped-dir').value.trim();
+  const libro=libros.find(l=>l.id===lId);if(!libro)return;
+  pedidos.push({id:'PED-'+String(nextPedId++).padStart(3,'0'),clienteId:cId,libroId:lId,cant,total:libro.precio*cant,fecha:new Date().toISOString().split('T')[0],estado:'Pendiente',dir});
+  libro.stock=Math.max(0,libro.stock-cant);
+  closeModal('modal-pedido');renderPedidos();
+}
+function cambiarEstado(id,e){const p=pedidos.find(x=>x.id===id);if(p)p.estado=e;}
+function guardarCliente(){
+  const id=document.getElementById('cli-id').value;
+  const obj={nombre:document.getElementById('cli-nombre').value.trim(),email:document.getElementById('cli-email').value.trim(),tel:document.getElementById('cli-tel').value.trim(),ciudad:document.getElementById('cli-ciudad').value.trim(),estado:document.getElementById('cli-estado').value};
+  if(!obj.nombre||!obj.email){alert('Nombre y email requeridos');return;}
+  if(id){const idx=clientes.findIndex(c=>c.id===parseInt(id));if(idx>=0)clientes[idx]={...clientes[idx],...obj};}
+  else{obj.id=nextCliId++;obj.pedidos=0;obj.gastado=0;clientes.push(obj);}
+  closeModal('modal-cliente');renderClientes();
+}
+function editCliente(id){
+  const c=clientes.find(x=>x.id===id);if(!c)return;
+  document.getElementById('cli-id').value=c.id;
+  ['nombre','email','tel','ciudad'].forEach(f=>document.getElementById('cli-'+f).value=c[f]||'');
+  document.getElementById('cli-estado').value=c.estado;
+  document.getElementById('modal-cliente-title').textContent='Editar cliente';
+  openModal('modal-cliente');
+}
+function eliminarCliente(id){if(!confirm('¿Eliminar este cliente?'))return;clientes=clientes.filter(c=>c.id!==id);renderClientes();}
+function resetCliModal(){['id','nombre','email','tel','ciudad'].forEach(f=>document.getElementById('cli-'+f).value='');document.getElementById('modal-cliente-title').textContent='Nuevo cliente';}
+function ajustarStock(id,d){const l=libros.find(x=>x.id===id);if(l){l.stock=Math.max(0,l.stock+d);renderInventario();}}
+function reponerStock(id){const n=parseInt(prompt('¿Cuántas unidades reponer?','10'));if(!isNaN(n)&&n>0){const l=libros.find(x=>x.id===id);if(l){l.stock+=n;renderInventario();}}}
+
+renderDashboard();
+</script>
