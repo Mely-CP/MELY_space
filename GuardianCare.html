@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardianCare - Protege a tus seres queridos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f9fc;
+            color: #333;
+        }
+
+        /* Navegación */
+        nav {
+            background-color: white;
+            padding: 1.5rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #5eb3d6;
+        }
+
+        /* Secciones principales */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Presentación */
+        #presentacion {
+            background: linear-gradient(135deg, #87ceeb 0%, #5eb3d6 100%);
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .logo-container {
+            width: 180px;
+            height: 180px;
+            background-color: #87ceeb;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .butterfly {
+            font-size: 80px;
+            color: white;
+        }
+
+        .eslogan {
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .subeslogan {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .presentation-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .device-image {
+            width: 250px;
+            height: 250px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .device-inner {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #5eb3d6, #87ceeb);
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .features {
+            text-align: left;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .features h3 {
+            color: #5eb3d6;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .features p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .map-example {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #e3f2f7 0%, #c9e4ec 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5eb3d6;
+            font-size: 1.2rem;
+        }
+
+        /* Login */
+        .login-container {
+            max-width: 400px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .login-container h3 {
+            color: #5eb3d6;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #5eb3d6;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #5eb3d6, #87ceeb);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Inicio (Dashboard) */
+        #inicio {
+            padding: 3rem 5%;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h2 {
+            color: #5eb3d6;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dashboard-card h3 {
+            color: #5eb3d6;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+
+        /* Producto */
+        #producto {
+            padding: 3rem 5%;
+        }
+
+        .producto-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .producto-header h2 {
+            color: #5eb3d6;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .producto-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 3rem auto;
+            align-items: center;
+        }
+
+        .producto-features {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .producto-features h3 {
+            color: #5eb3d6;
+            margin-bottom: 1.5rem;
+        }
+
+        .producto-features ul {
+            list-style: none;
+        }
+
+        .producto-features li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .producto-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #5eb3d6;
+            font-weight: bold;
+        }
+
+        /* Contacto */
+        #contacto {
+            padding: 3rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contacto-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .contacto-card h2 {
+            color: #5eb3d6;
+            margin-bottom: 2rem;
+        }
+
+        .contacto-info {
+            margin: 2rem 0;
+        }
+
+        .contacto-item {
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-media a {
+            color: #5eb3d6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Mapa */
+        #mapa {
+            padding: 3rem 5%;
+        }
+
+        .mapa-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .mapa-grande {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #e3f2f7 0%, #c9e4ec 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5eb3d6;
+            font-size: 1.5rem;
+        }
+
+        /* Configuración */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        .config-option {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .config-option:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Alertas y Notificaciones */
+        .alert-list {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .alert-item {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav id="mainNav" class="hidden">
+        <ul>
+            <li><a onclick="showSection('inicio')">Inicio</a></li>
+            <li><a onclick="showSection('producto')">Producto</a></li>
+            <li><a onclick="showSection('contacto')">Contacto</a></li>
+            <li><a onclick="showSection('configuracion')">Configuración</a></li>
+            <li><a onclick="showSection('aplicacion')">Aplicación</a></li>
+        </ul>
+    </nav>
+
+    <!-- Presentación / Login -->
+    <div id="presentacion" class="section active">
+        <div class="logo-container">
+            <div class="butterfly">🦋</div>
+        </div>
+        <h1 class="eslogan">Protege tus seres queridos en tiempo real</h1>
+        <p class="subeslogan">Dispositivo GPS para rastrear a los que amas en tiempo real</p>
+
+        <div class="presentation-content">
+            <div>
+                <div class="device-image">
+                    <div class="device-inner"></div>
+                </div>
+            </div>
+            <div class="features">
+                <h3>¿Cómo funciona?</h3>
+                <p>Rastrea en tiempo real con nuestra app sencilla.</p>
+                <p><strong>1. Rastreador en tiempo real</strong></p>
+                <p><strong>2. Historial de ubicación</strong></p>
+                <p><strong>3. Seguro y confiable</strong></p>
+            </div>
+        </div>
+
+        <div class="map-example">
+            <div class="map-placeholder">📍 Mapa de ejemplo</div>
+        </div>
+
+        <div class="login-container">
+            <h3>Iniciar Sesión</h3>
+            <input type="text" id="username" placeholder="Nombre de usuario">
+            <input type="email" id="email" placeholder="Correo electrónico">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button onclick="login()">Ingresar</button>
+        </div>
+    </div>
+
+    <!-- Inicio (Dashboard) -->
+    <div id="inicio" class="section">
+        <div class="dashboard-header">
+            <h2>Bienvenido, <span id="userName"></span>. Protege a tus seres queridos en tiempo real.</h2>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Dispositivo Principal <span class="status-indicator"></span></h3>
+                <p>Estado: Conectado</p>
+                <button onclick="showSection('mapa')">Iniciar Rastreo</button>
+            </div>
+            <div class="dashboard-card">
+                <div style="height: 150px; background: linear-gradient(135deg, #e3f2f7, #c9e4ec); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    📍 Mapa pequeño
+                </div>
+                <button onclick="showSection('mapa')">Ampliar Mapa</button>
+            </div>
+            <div class="dashboard-card card-full">
+                <p style="font-size: 1.2rem; color: #666; margin-bottom: 1rem;">GuardianCare te mantiene siempre cerca de quienes amas.</p>
+                <button onclick="showSection('dispositivos')">Ver dispositivos conectados</button>
+            </div>
+            <div class="dashboard-card">
+                <h3>Historial de Ubicación</h3>
+                <button onclick="showSection('historial')">Ver Historial</button>
+            </div>
+            <div class="dashboard-card">
+                <h3>Configuración</h3>
+                <button onclick="showSection('configuracion')">Acceder a Configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Producto -->
+    <div id="producto" class="section">
+        <div class="producto-header">
+            <h2>El dispositivo que te conecta con la tranquilidad</h2>
+            <p style="max-width: 800px; margin: 1rem auto; color: #666; font-size: 1.1rem;">
+                Pequeño, ligero y fácil de usar, el GPS GuardianCare te permite localizar en tiempo real a tus seres queridos desde tu celular.
+            </p>
+        </div>
+        <div class="producto-content">
+            <div class="producto-features">
+                <div class="device-image" style="margin-bottom: 2rem;">
+                    <div class="device-inner"></div>
+                </div>
+                <ul>
+                    <li>Ubicación en tiempo real</li>
+                    <li>Batería de larga duración</li>
+                    <li>Resistente al agua y golpes</li>
+                    <li>Diseño cómodo y discreto</li>
+                </ul>
+            </div>
+            <div class="producto-features">
+                <h3>Control total desde tu aplicación GuardianCare</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    Conecta el dispositivo a tu smartphone y visualiza tu ubicación en un mapa, configura alertas y zonas seguras, todo desde una interfaz sencilla.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contacto -->
+    <div id="contacto" class="section">
+        <div class="contacto-card">
+            <h2>Contáctanos</h2>
+            <div class="contacto-info">
+                <div class="contacto-item">
+                    📧 guardiancare.cr@gmail.com
+                </div>
+                <div class="contacto-item">
+                    📱 71500525
+                </div>
+                <div class="social-media">
+                    <a href="#">📘 Facebook: GuardianCare CR</a>
+                    <a href="#">📸 Instagram: GuardianCare CR</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuración -->
+    <div id="configuracion" class="section">
+        <div class="dashboard-header">
+            <h2>Configuración</h2>
+        </div>
+        <div class="config-grid">
+            <div class="config-option" onclick="showSection('alertas')">
+                <h3>🔔 Alertas</h3>
+                <p>Configura alertas personalizadas</p>
+            </div>
+            <div class="config-option" onclick="showSection('notificaciones')">
+                <h3>📬 Notificaciones</h3>
+                <p>Administra tus notificaciones</p>
+            </div>
+            <div class="config-option" onclick="showSection('geocercas')">
+                <h3>📍 Geocercas</h3>
+                <p>Define zonas seguras</p>
+            </div>
+            <div class="config-option" onclick="showSection('alarmas')">
+                <h3>⏰ Alarmas</h3>
+                <p>Programa alarmas de tiempo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mapa -->
+    <div id="mapa" class="section">
+        <div class="mapa-container">
+            <h2 style="color: #5eb3d6; margin-bottom: 1rem;">Rastreo en Tiempo Real</h2>
+            <div class="mapa-grande">🗺️ Mapa Interactivo en Tiempo Real</div>
+            <button style="margin-top: 1rem;" onclick="showSection('inicio')">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <!-- Alertas -->
+    <div id="alertas" class="section">
+        <div class="dashboard-header">
+            <h2>Alertas</h2>
+        </div>
+        <div class="alert-list">
+            <div class="alert-item">
+                <h3 style="color: #5eb3d6;">Alerta 1: Fuera de zona segura</h3>
+                <p>Configurada para notificar cuando el dispositivo salga de la zona segura</p>
+            </div>
+            <button onclick="alert('Agregar nueva alerta')">+ Agregar Nueva Alerta</button>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notificaciones" class="section">
+        <div class="dashboard-header">
+            <h2>Notificaciones</h2>
+        </div>
+        <div class="alert-list">
+            <div class="alert-item">
+                <h3 style="color: #5eb3d6;">Notificaciones activas</h3>
+                <p>Recibirás notificaciones push en tu dispositivo</p>
+            </div>
+            <button onclick="alert('Agregar nueva notificación')">+ Agregar Nueva Notificación</button>
+        </div>
+    </div>
+
+    <!-- Geocercas -->
+    <div id="geocercas" class="section">
+        <div class="mapa-container">
+            <h2 style="color: #5eb3d6; margin-bottom: 1rem;">Geocercas</h2>
+            <div class="mapa-grande">🗺️ Configura tus zonas seguras en el mapa</div>
+            <button style="margin-top: 1rem;" onclick="alert('Crear nueva geocerca')">+ Crear Nueva Geocerca</button>
+        </div>
+    </div>
+
+    <!-- Alarmas -->
+    <div id="alarmas" class="section">
+        <div class="dashboard-header">
+            <h2>Alarmas de Tiempo</h2>
+        </div>
+        <div class="alert-list">
+            <div class="alert-item">
+                <h3 style="color: #5eb3d6;">Programar Nueva Alarma</h3>
+                <input type="time" style="margin: 1rem 0;">
+                <button>Guardar Alarma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dispositivos -->
+    <div id="dispositivos" class="section">
+        <div class="dashboard-header">
+            <h2>Dispositivos Conectados</h2>
+        </div>
+        <div class="alert-list">
+            <div class="alert-item">
+                <h3 style="color: #5eb3d6;">Dispositivo 1 - Activo</h3>
+                <p>Conectado recientemente</p>
+            </div>
+            <div class="alert-item">
+                <h3 style="color: #999;">Dispositivo 2 - Inactivo</h3>
+                <p>Última conexión: hace 2 días</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial -->
+    <div id="historial" class="section">
+        <div class="mapa-container">
+            <h2 style="color: #5eb3d6; margin-bottom: 1rem;">Historial de Ubicación</h2>
+            <div class="mapa-grande">📊 Historial de ubicaciones recientes</div>
+        </div>
+    </div>
+
+    <!-- Aplicación -->
+    <div id="aplicacion" class="section">
+        <div class="dashboard-header">
+            <h2>Aplicación GuardianCare</h2>
+            <p style="color: #666; margin-top: 1rem;">Descarga nuestra aplicación móvil para iOS y Android</p>
+        </div>
+        <div style="text-align: center; margin: 2rem auto; max-width: 600px;">
+            <div style="background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                <div class="device-image" style="margin: 0 auto 2rem;">
+                    <div class="device-inner"></div>
+                </div>
+                <h3 style="color: #5eb3d6; margin-bottom: 1rem;">Disponible pronto en:</h3>
+                <p>📱 App Store</p>
+                <p>📱 Google Play</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 GuardianCare. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let currentUser = '';
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (username && email && password) {
+                currentUser = username;
+                document.getElementById('userName').textContent = currentUser;
+                document.getElementById('mainNav').classList.remove('hidden');
+                showSection('inicio');
+            } else {
+                alert('Por favor completa todos los campos');
+            }
+        }
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
